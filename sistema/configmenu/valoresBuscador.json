@@ -1,0 +1,10 @@
+{
+    "pages": [
+        {
+            "name": "Ticket > Listado",
+            "icon": "ri-coupon-2-line",
+            "ruta": "listado-tickets",
+            "url": "appTicketListado.open();"
+        }
+    ]
+}

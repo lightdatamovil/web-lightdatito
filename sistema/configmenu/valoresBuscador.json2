@@ -1,0 +1,16 @@
+{
+    "pages": [
+        {
+            "name": "Ticket > Nuevo",
+            "icon": "ri-coupon-2-line",
+            "ruta": "nuevo-ticket",
+            "url": "appTicketNuevo.open();"
+        },
+        {
+            "name": "Ticket > Listado",
+            "icon": "ri-coupon-2-line",
+            "ruta": "listado-tickets",
+            "url": "appTicketListado.open();"
+        }
+    ]
+}
