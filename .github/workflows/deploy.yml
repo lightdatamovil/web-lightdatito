@@ -25,6 +25,7 @@ jobs:
                   force-passive: true
                   deploy-only-on-changes: true
                   max-parallel: 1
+                  dry-run: true
                   exclude: |
                       **/.git*
                       **/.github/**
