@@ -10,20 +10,22 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repo
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
 
             - name: Deploy via FTP
-              uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+              uses: SamKirkland/FTP-Deploy-Action@v4.3.6
               with:
                   server: ${{ secrets.FTP_SERVER }}
                   username: ${{ secrets.FTP_USER }}
                   password: ${{ secrets.FTP_PASS }}
-                  protocol: ftps
-                  server-dir: /lightdatito/
-                  local-dir: ./
-                  dry-run: false # ponelo en true si querés probar sin subir nada
+                  protocol: ftps # ftp | ftps | ftps-legacy
+                  port: 21 # ajustalo si tu hosting usa otro
+                  local-dir: ./ # importante: con trailing slash
+                  server-dir: /lightdatito/ # también con trailing slash
+                  dry-run: false # ponelo en true para probar sin subir
                   exclude: |
-                      .git/
-                      .github/
-                      node_modules/
-                      assets/
+                      **/.git*
+                      **/.git*/**
+                      **/.github/**
+                      **/node_modules/**
+                      **/assets/**
