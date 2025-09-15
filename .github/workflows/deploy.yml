@@ -15,14 +15,13 @@ jobs:
             - name: Deploy via FTP
               uses: SamKirkland/FTP-Deploy-Action@v4.3.6
               with:
-                  server: ${{ secrets.FTP_SERVER }}
+                  server: ftp.files.lightdata.app
                   username: ${{ secrets.FTP_USER }}
                   password: ${{ secrets.FTP_PASS }}
-                  protocol: ftps # ftp | ftps | ftps-legacy
-                  port: 21 # ajustalo si tu hosting usa otro
-                  local-dir: ./ # importante: con trailing slash
-                  server-dir: /lightdatito/ # también con trailing slash
-                  dry-run: false # ponelo en true para probar sin subir
+                  protocol: ftps # FTPS explícito (TLS)
+                  port: 21
+                  server-dir: /lightdatito/
+                  local-dir: ./
                   exclude: |
                       **/.git*
                       **/.git*/**
