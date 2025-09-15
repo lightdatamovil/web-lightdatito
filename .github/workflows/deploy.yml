@@ -21,13 +21,9 @@ jobs:
                   protocol: ftps
                   server-dir: /lightdatito/
                   local-dir: ./
-                  passive: true
-                  force-passive: true
-                  deploy-only-on-changes: true
-                  max-parallel: 1
-                  dry-run: true
+                  dry-run: false # ponelo en true si querés probar sin subir nada
                   exclude: |
-                      **/.git*
-                      **/.github/**
-                      **/node_modules/**
-                      **/assets/**
+                      .git/
+                      .github/
+                      node_modules/
+                      assets/
