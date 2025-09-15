@@ -22,7 +22,9 @@ jobs:
                   local-dir: ./
                   exclude: |
                       **/.git*
-                      **/.git*/**
                       **/.github/**
+                      package.json
+                      package-lock.json
+                      .gitignore
                       **/node_modules/**
                       **/assets/**
