@@ -15,7 +15,7 @@ jobs:
             - name: Deploy via FTP
               uses: SamKirkland/FTP-Deploy-Action@v4.3.6
               with:
-                  server: ftp.files.lightdata.app
+                  server: ${{ secrets.FTP_SERVER }}
                   username: ${{ secrets.FTP_USER }}
                   password: ${{ secrets.FTP_PASS }}
                   protocol: ftps # FTPS explícito (TLS)
