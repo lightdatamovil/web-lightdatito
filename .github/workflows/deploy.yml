@@ -18,8 +18,6 @@ jobs:
                   server: ${{ secrets.FTP_SERVER }}
                   username: ${{ secrets.FTP_USER }}
                   password: ${{ secrets.FTP_PASS }}
-                  protocol: ftps # FTPS explícito (TLS)
-                  port: 21
                   server-dir: /lightdatito/
                   local-dir: ./
                   exclude: |
