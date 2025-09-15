@@ -109,8 +109,8 @@
                         <div class="form-floating form-floating-outline mb-5">
                             <input
                                 type="text"
-                                class="form-control camposLogin"
-                                id="user"
+                                class="form-control campos_login"
+                                id="user_login"
                                 name="email-username"
                                 placeholder="Ingrese su email"
                                 autofocus />
@@ -122,14 +122,14 @@
                                     <div class="form-floating form-floating-outline">
                                         <input
                                             type="password"
-                                            id="password"
-                                            class="form-control camposLogin"
+                                            id="password_login"
+                                            class="form-control campos_login"
                                             name="password"
                                             placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                                             aria-describedby="password" />
                                         <label for="password">Contraseña</label>
                                     </div>
-                                    <span id="ojitoLogin" onclick="appLogin.verPassword()" class="input-group-text cursor-pointer"><i class="ri-eye-off-line"></i></span>
+                                    <span id="ojito_login" onclick="appLogin.verPassword()" class="input-group-text cursor-pointer"><i class="ri-eye-off-line"></i></span>
                                 </div>
                             </div>
                         </div>
@@ -142,8 +142,8 @@
                                 <span>Olvidaste la contraseña?</span>
                             </a> -->
                         <!-- </div> -->
-                        <button id="btnIngresarLogin" class="btn btn-primary d-grid w-100" onclick='appLogin.login();'>Ingresar</button>
-                        <button id="btnLoadingLogin" class="btn btn-primary w-100 ocultar" type="button" disabled>
+                        <button id="btnIngresar_login" class="btn btn-primary d-grid w-100" onclick='appLogin.login();'>Ingresar</button>
+                        <button id="btnLoading_login" class="btn btn-primary w-100 ocultar" type="button" disabled>
                             <span class="spinner-border me-1" role="status" aria-hidden="true"></span>
                             Cargando...
                         </button>
@@ -190,30 +190,29 @@
             public = {};
 
             public.Inicializar = function() {
-                localStorage.removeItem("userI");
-                localStorage.removeItem("tkn");
+                localStorage.removeItem("userId");
+                localStorage.removeItem("authToken");
             };
 
             public.reset = function() {
-                $("#user").val("");
-                $("#password").val("");
-                localStorage.removeItem("userI");
-                localStorage.clear();
+                $(".campos_login").val("");
+                localStorage.removeItem("authToken");
+                localStorage.removeItem("userId");
             };
 
             public.login = function() {
-                $("#btnIngresarLogin").addClass("ocultar");
-                $("#btnLoadingLogin").removeClass("ocultar");
-                $(".camposLogin").removeClass("is-invalid");
+                $("#btnIngresar_login").addClass("ocultar");
+                $("#btnLoading_login").removeClass("ocultar");
+                $(".campos_login").removeClass("is-invalid");
 
-                const user = $("#user").val();
-                const password = $("#password").val();
+                const user = $("#user_login").val();
+                const password = $("#password_login").val();
 
                 if (user == "" || password == "") {
-                    $(".camposLogin").addClass("is-invalid");
+                    $(".campos_login").addClass("is-invalid");
                     globalSweetalert.error("Debes completar todos los campos");
-                    $("#btnIngresarLogin").removeClass("ocultar");
-                    $("#btnLoadingLogin").addClass("ocultar");
+                    $("#btnIngresar_login").removeClass("ocultar");
+                    $("#btnLoading_login").addClass("ocultar");
                     return;
                 }
 
@@ -223,38 +222,38 @@
                 };
 
                 $.ajax({
-                    url: "users/processlogin.php", // Nuevo PHP que hace proxy
+                    url: "login/processLogin.php", // Nuevo PHP que hace proxy
                     type: "POST",
                     dataType: "json",
                     data: parametros,
                     success: function(response) {
                         if (response.estado) {
-                            localStorage.setItem("userI", response.data.id);
-                            localStorage.setItem("tkn", response.data.token);
-                            localStorage.setItem("userN", response.data.nombre);
+                            localStorage.setItem("userId", response.data.id);
+                            localStorage.setItem("authToken", response.data.authToken);
+                            localStorage.setItem("userName", response.data.nombre);
                             localStorage.setItem("userPuesto", JSON.stringify((response.data.puestos || []).map(item => item.id)));
 
                             location.reload();
 
                         } else {
-                            $(".camposLogin").addClass("is-invalid");
+                            $(".campos_login").addClass("is-invalid");
                             globalSweetalert.error(response.mensaje);
                         }
-                        $("#btnIngresarLogin").removeClass("ocultar");
-                        $("#btnLoadingLogin").addClass("ocultar");
+                        $("#btnIngresar_login").removeClass("ocultar");
+                        $("#btnLoading_login").addClass("ocultar");
                     },
                     error: function() {
                         globalSweetalert.error("Error en el servidor");
-                        $("#btnIngresarLogin").removeClass("ocultar");
-                        $("#btnLoadingLogin").addClass("ocultar");
+                        $("#btnIngresar_login").removeClass("ocultar");
+                        $("#btnLoading_login").addClass("ocultar");
                     }
                 });
 
             };
 
             public.verPassword = function() {
-                const passwordInput = document.getElementById("password");
-                const icon = document.querySelector("#ojitoLogin i");
+                const passwordInput = document.getElementById("password_login");
+                const icon = document.querySelector("#ojito_login i");
 
                 if (passwordInput.type === "password") {
                     passwordInput.type = "text";
@@ -267,11 +266,11 @@
                 }
             };
 
-            $(".camposLogin").on("input", function() {
+            $(".campos_login").on("input", function() {
                 $(this).removeClass("is-invalid");
             });
 
-            $(".camposLogin").on("keydown", function(e) {
+            $(".campos_login").on("keydown", function(e) {
                 if (e.key === "Enter") {
                     e.preventDefault();
                     appLogin.login();

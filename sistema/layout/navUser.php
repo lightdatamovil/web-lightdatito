@@ -1,7 +1,7 @@
 <li class="nav-item navbar-dropdown dropdown-user dropdown">
 	<a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
 		<div class="avatar avatar-online">
-			<img src="assets//img/avatars/1.png" alt class="rounded-circle" />
+			<img src="assets/img/avatars/1.png" alt class="rounded-circle" />
 		</div>
 	</a>
 	<ul class="dropdown-menu dropdown-menu-end">
@@ -57,7 +57,7 @@
 		</li>
 		<li> -->
 		<div class="d-grid px-4 pt-2 pb-1">
-			<a class="btn btn-sm btn-danger d-flex" href="/" data-route="logout" onclick='appSistema.desloguear();'>
+			<a class="btn btn-sm btn-danger d-flex" href="/" data-route="logout" onclick='appSistema.logout();'>
 				<small class="align-middle">Logout</small>
 				<i class="ri-logout-box-r-line ms-2 ri-16px"></i>
 			</a>

@@ -1,6 +1,6 @@
 <?php
 
-if (!isset($_SESSION["logeado"])) {
+if (!isset($_SESSION["logueado"])) {
     header("Location: https://lightdatito.lightdata.app");
     exit();
 }
@@ -126,8 +126,7 @@ if (!isset($_SESSION["logeado"])) {
 
                 <div class="menu-inner-shadow"></div>
 
-                <?php include("sistema/menulateral.php"); ?>
-
+                <?php include("sistema/layout/sidebar.php"); ?>
             </aside>
             <!-- / Menu -->
 
@@ -157,38 +156,6 @@ if (!isset($_SESSION["logeado"])) {
                         <!-- /Search -->
 
                         <ul class="navbar-nav flex-row align-items-center ms-auto">
-                            <!-- Language -->
-                            <!-- <li class="nav-item dropdown-language dropdown">
-                                <a
-                                    class="nav-link btn btn-text-secondary rounded-pill btn-icon dropdown-toggle hide-arrow"
-                                    href="javascript:void(0);"
-                                    data-bs-toggle="dropdown">
-                                    <i class="ri-translate-2 ri-22px"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li>
-                                        <a class="dropdown-item" href="javascript:void(0);" data-language="en" data-text-direction="ltr">
-                                            <span class="align-middle">English</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="javascript:void(0);" data-language="fr" data-text-direction="ltr">
-                                            <span class="align-middle">French</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="javascript:void(0);" data-language="ar" data-text-direction="rtl">
-                                            <span class="align-middle">Arabic</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="javascript:void(0);" data-language="de" data-text-direction="ltr">
-                                            <span class="align-middle">German</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li> -->
-                            <!--/ Language -->
 
                             <!-- Style Switcher -->
                             <li class="nav-item dropdown-style-switcher dropdown me-1 me-xl-0">
@@ -228,7 +195,7 @@ if (!isset($_SESSION["logeado"])) {
                             <!--/ Notification -->
 
                             <!-- User -->
-                            <?php include("sistema/navusermenu.php"); ?>
+                            <?php include("sistema/layout/navUser.php"); ?>
                             <!--/ User -->
                         </ul>
                     </div>
@@ -252,7 +219,7 @@ if (!isset($_SESSION["logeado"])) {
 
                     <div id="containerAPP" class="container-xxl flex-grow-1 container-p-y">
                         <?php include("modulos/include.php"); ?>
-                        <?php include("sistema/include.php"); ?>
+                        <!-- < ?php include("sistema/include.php"); ?> -->
 
                         <div class="winapp w-100 h-100" id="ContainerHomeNovedades">
                             <div class="w-100 h-100 position-relative d-flex d-md-block justify-content-center align-items-center">
@@ -358,7 +325,7 @@ if (!isset($_SESSION["logeado"])) {
     <script src="assets/js/forms-typeahead.js"></script>
 
     <!-- APP SISTEMA -->
-    <?php include("sistema/js/sistema.php"); ?>
+    <?php include("sistema/sistema.php"); ?>
 
     <!-- CUSTOM LIBS (Funciones globales y librerias propias) -->
     <?php include("sistema/customLib/paginado.php"); ?>
@@ -372,6 +339,8 @@ if (!isset($_SESSION["logeado"])) {
     <?php include("sistema/customLib/inputImg.php"); ?>
     <?php include("sistema/customLib/excelJs.php"); ?>
     <?php include("sistema/customLib/sinInformacion.php"); ?>
+    <?php include("sistema/customLib/ordenTablas.php"); ?>
+    <?php include("sistema/customLib/requestApi.php"); ?>
     <?php include("sistema/customLib/vistaPorPuesto.php"); ?>
 
 

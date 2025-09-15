@@ -3,7 +3,11 @@
 
         public = {}
 
-        public.tablasVacias = function(idTbody, type = 0, element) {
+        public.tablasVacias = function({
+            idTbody,
+            open = 0,
+            element
+        }) {
             $(`#${idTbody}`).empty()
 
             const tabla = $(`#${idTbody}`).closest("table");

@@ -3,16 +3,21 @@
 
         const public = {};
 
-        public.confirmar = function(titulo, color, btnConfirmar, btnCancelar) {
+        public.confirmar = function({
+            titulo = "¿Estás seguro?",
+            color = "var(--bs-primary)",
+            btnConfirmar = "Sí",
+            btnCancelar = "Volver"
+        } = {}) {
             return Swal.fire({
-                title: titulo || "¿Estás seguro?",
+                title: titulo,
                 icon: "warning",
-                iconColor: color || "var(--bs-primary)",
+                iconColor: color,
                 showConfirmButton: true,
                 showCancelButton: true,
                 showDenyButton: false,
-                confirmButtonText: btnConfirmar || "Sí",
-                cancelButtonText: btnCancelar || "Volver",
+                confirmButtonText: btnConfirmar,
+                cancelButtonText: btnCancelar,
                 customClass: {
                     confirmButton: "btn btn-primary",
                     cancelButton: "btn btn-secondary"
@@ -25,42 +30,58 @@
             })
         }
 
-        public.alert = function(titulo, color, time) {
+        public.alert = function({
+            titulo = "Completar proceso",
+            color = "var(--bs-primary)",
+            time = 1500
+        } = {}) {
             Swal.fire({
-                title: titulo || "Completar proceso",
+                title: titulo,
                 icon: "warning",
-                iconColor: color || "var(--bs-primary)",
+                iconColor: color,
                 showConfirmButton: false,
-                timer: time || 1500,
+                timer: time,
             })
         }
 
-        public.error = function(titulo, color, time) {
+        public.error = function({
+            titulo = "Error al actualizar",
+            color = "var(--bs-danger)",
+            time = 1500
+        } = {}) {
             Swal.fire({
-                title: titulo || "Error al actualizar",
+                title: titulo,
                 icon: "error",
-                iconColor: color || "var(--bs-danger)",
+                iconColor: color,
                 showConfirmButton: false,
-                timer: time || 1500,
+                timer: time,
             })
         }
 
-        public.exito = function(titulo, color, time) {
+        public.exito = function({
+            titulo = "Guardado con exito!",
+            color = "var(--bs-success)",
+            time = 1500
+        } = {}) {
             Swal.fire({
-                title: titulo || "Guardado con exito!",
+                title: titulo,
                 icon: "success",
-                iconColor: color || "var(--bs-success)",
+                iconColor: color,
                 showConfirmButton: false,
-                timer: 1500,
+                timer: time,
             })
         }
 
-        public.notificacion = function(titulo, color, time) {
+        public.notificacion = function({
+            titulo = "Alerta!",
+            color = "var(--bs-warning)",
+            time = 1500
+        } = {}) {
             const Toast = Swal.mixin({
                 toast: true,
                 position: "bottom-end",
                 showConfirmButton: false,
-                timer: time || 1500,
+                timer: time,
                 timerProgressBar: true,
                 didOpen: (toast) => {
                     toast.onmouseenter = Swal.stopTimer
@@ -69,18 +90,24 @@
             })
             Toast.fire({
                 icon: "warning",
-                title: titulo || `Alerta!`,
-                iconColor: color || "var(--bs-warning)",
+                title: titulo,
+                iconColor: color,
             })
         }
 
-        public.redireccion = function(titulo, color, subtitulo, boton, accion) {
+        public.redireccion = function({
+            titulo = "Realizado con exito!",
+            color = "var(--bs-primary)",
+            subtitulo = "",
+            boton = "Redirigir",
+            accion = ""
+        } = {}) {
             Swal.fire({
                 icon: "success",
-                title: titulo || "Realizado con exito!",
-                text: subtitulo || "",
-                footer: `<a style="cursor: pointer;font-weight: bolder;color: ${color || "var(--bs-primary)"};font-size: 16px;" onclick="Swal.close(); ${accion || ""}">${boton || "Redirigir"}</a>`,
-                iconColor: color || "var(--bs-primary)",
+                title: titulo,
+                text: subtitulo,
+                footer: `<a style="cursor: pointer;font-weight: bolder;color: ${color};font-size: 16px;" onclick="Swal.close(); ${accion}">${boton}</a>`,
+                iconColor: color,
                 confirmButtonText: "Volver",
                 showDenyButton: false,
                 showCancelButton: false,
@@ -91,12 +118,17 @@
             });
         }
 
-        public.redireccionObligada = function(titulo, color, boton, accion) {
+        public.redireccionObligada = function({
+            titulo = "Realizado con éxito!",
+            color = "var(--bs-primary)",
+            boton = "Redirigir",
+            accion = ""
+        } = {}) {
             Swal.fire({
                 icon: "warning",
-                title: titulo || "Realizado con éxito!",
-                html: `<a style="cursor: pointer; font-weight: bolder; color: ${color || "var(--bs-primary)"}; font-size: 16px;" onclick="Swal.close(); ${accion || ""}">${boton || "Redirigir"}</a>`,
-                iconColor: color || "var(--bs-primary)",
+                title: titulo,
+                html: `<a style="cursor: pointer; font-weight: bolder; color: ${color}; font-size: 16px;" onclick="Swal.close(); ${accion}">${boton}</a>`,
+                iconColor: color,
                 showConfirmButton: false,
                 showDenyButton: false,
                 showCancelButton: false,
@@ -107,12 +139,16 @@
             });
         };
 
-        public.html = function(titulo, color, html) {
+        public.html = function({
+            titulo = "Realizado con exito!",
+            color = "var(--bs-success)",
+            html = ""
+        } = {}) {
             Swal.fire({
                 icon: "success",
-                title: titulo || "Realizado con exito!",
-                html: html || "",
-                iconColor: color || "var(--bs-success)",
+                title: titulo,
+                html: html,
+                iconColor: color,
                 confirmButtonText: "Volver",
                 showDenyButton: false,
                 showCancelButton: false,
@@ -121,6 +157,42 @@
                 },
                 buttonsStyling: false
             });
+
+            globalActivarAcciones.tooltips({
+                idContainer: "swal2-html-container"
+            })
+        }
+
+
+        public.errorReportable = function({
+            error,
+            ruta,
+            metodo
+        }) {
+            const link = window.location.href;
+            const perfil = appSistema.perfiles[appSistema.perfilUser];
+            const titulo = error.responseJSON?.title;
+            const mensaje = error.responseJSON?.message;
+            const codigo = error.status;
+
+            const errorMsg = encodeURIComponent(`Estimado/a,\nMe comunico con el fin de reportar un problema en el sistema de Fulfillment\n\n*Link:* ${link || "No disponible"}\n*Titulo:* ${titulo || "No disponible"}\n*Mensaje:* ${mensaje || "No disponible"}\n*Codigo de error:* ${codigo || "No disponible"}\n*Ruta:* ${ruta || "No disponible"}\n*Metodo:* ${metodo || "No disponible"}\n*Usuario:* ${appSistema.usernameUser || "No disponible"} (${appSistema.didUser || "No disponible"})\n*Rol:* ${perfil || "No disponible"}\n\nEspero su respuesta,\nMuchas gracias.`);
+            const buffer = `<a class="btn rounded-pill btn-label-success waves-effect" href="https://wa.me/?text=${errorMsg}" target="_blank"><span class="tf-icons ri-customer-service-2-fill ri-16px me-2"></span>Reportar error</a>`
+
+            Swal.fire({
+                icon: "warning",
+                title: `Error del sistema${titulo ? `:</br>${titulo}`: ""}`,
+                text: mensaje || "",
+                footer: buffer,
+                iconColor: "var(--bs-danger)",
+                confirmButtonText: "Volver",
+                showDenyButton: false,
+                showCancelButton: false,
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                },
+                buttonsStyling: false
+            });
+
         }
 
 

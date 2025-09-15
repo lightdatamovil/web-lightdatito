@@ -1,12 +1,12 @@
 <?php
 session_start();
 
-if (isset($_SESSION["logeado"])) {
-    if ($_SESSION["logeado"] === true) {
+if (isset($_SESSION["logueado"])) {
+    if ($_SESSION["logueado"] === true) {
         include("home.php"); // Usuario logueado correctamente
     } else {
-        include("homebloqueada.php"); // Usuario bloqueado
+        include("login/homebloqueada.php"); // Usuario bloqueado
     }
 } else {
-    include("login.php"); // No inició sesión o faltan datos
+    include("login/login.php"); // No inició sesión o faltan datos
 }

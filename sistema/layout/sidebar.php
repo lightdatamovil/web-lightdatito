@@ -1,10 +1,10 @@
 <?php
 
 $buffer = "<ul class='menu-inner py-1'>";
-//$Amenu = json_decode(file_get_contents("sistema/configmenu/menu_default.json"),true);
-$strmenu = file_get_contents("sistema/configmenu/menu_default.json");
+//$Amenu = json_decode(file_get_contents("sistema/configMenu/menuDefault.json"),true);
+$strmenu = file_get_contents("sistema/configMenu/menuDefault.json");
 
-function filtrarMenuPorPerfil($perfil, $menuJsonPath = "sistema/configmenu/menu_default.json")
+function filtrarMenuPorPerfil($perfil, $menuJsonPath = "sistema/configMenu/menuDefault.json")
 {
 	// Cargar el menú original
 	$Amenu = json_decode(file_get_contents($menuJsonPath), true);

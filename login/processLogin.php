@@ -30,19 +30,19 @@ $result = json_decode($response, true);
 
 if ($result && isset($result['success']) && $result['success']) {
     $user = $result['body'];
-    $_SESSION['logeado'] = true;
+    $_SESSION['logueado'] = true;
     $_SESSION['user'] = json_encode($user);
     $_SESSION['userId'] = $user['id'];
     $_SESSION['userNombre'] = $user['nombre'];
-    $_SESSION['tkn'] = $user['token'];
+    $_SESSION['authToken'] = $user['token'];
 
     echo json_encode([
         "estado" => true,
-        "mensaje" => "Login correcto",
+        "mensaje" => $result['message'] ?? "Login correcto",
         "data" => $user
     ]);
 } else {
-    $_SESSION['logeado'] = false;
+    $_SESSION['logueado'] = false;
     echo json_encode([
         "estado" => false,
         "mensaje" => $result['message'] ?? "Usuario o contraseña incorrectos"

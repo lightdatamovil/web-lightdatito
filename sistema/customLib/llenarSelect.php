@@ -3,7 +3,10 @@
 
         const public = {}
 
-        public.estadosTickets = function(id, multiple = false) {
+        public.estadosTickets = function({
+            id,
+            multiple = false
+        }) {
             if (appSistema.estadosTickets.length == 0) {
                 $(`#${id}`).html(`<option value="" ${multiple ? "" : "selected"} disabled>Sin estados</option>`)
                 return
@@ -21,7 +24,10 @@
             $(`#${id}`).html(buffer)
         }
 
-        public.prioridades = function(id, multiple = false) {
+        public.prioridades = function({
+            id,
+            multiple = false
+        }) {
             if (appSistema.prioridades.length == 0) {
                 $(`#${id}`).html(`<option value="" ${multiple ? "" : "selected"} disabled>Sin SLA</option>`)
                 return
@@ -39,7 +45,10 @@
             $(`#${id}`).html(buffer)
         }
 
-        public.logisticas = function(id, multiple = false) {
+        public.logisticas = function({
+            id,
+            multiple = false
+        }) {
             if (appSistema.logisticas.length == 0) {
                 $(`#${id}`).html(`<option value="" ${multiple ? "" : "selected"} disabled>Sin clientes</option>`)
                 return
@@ -64,7 +73,10 @@
         }
 
 
-        public.desarrolladores = function(id, multiple = false) {
+        public.desarrolladores = function({
+            id,
+            multiple = false
+        }) {
             desarrolladores = appSistema.usuarios.filter(user => user.puestos.find((puesto) => puesto.id == 1))
 
             if (desarrolladores.length == 0) {
@@ -90,7 +102,10 @@
             $(`#${id}`).html(buffer)
         }
 
-        public.boxStaff = function(id, multiple = false) {
+        public.boxStaff = function({
+            id,
+            multiple = false
+        }) {
             boxStaff = appSistema.usuarios.filter(user => user.puestos.find((puesto) => puesto.id == 5))
 
             if (boxStaff.length == 0) {
@@ -116,7 +131,10 @@
             $(`#${id}`).html(buffer)
         }
 
-        public.usuariosAsignables = function(id, multiple = false) {
+        public.usuariosAsignables = function({
+            id,
+            multiple = false
+        }) {
             usuariosAsignables = appSistema.usuarios.filter(user => user.puestos.find((puesto) => puesto.id == 1 || puesto.id == 5))
 
             if (usuariosAsignables.length == 0) {
@@ -142,7 +160,10 @@
             $(`#${id}`).html(buffer)
         }
 
-        public.tiposTickets = function(id, multiple = false) {
+        public.tiposTickets = function({
+            id,
+            multiple = false
+        }) {
             if (appSistema.tipoTicket.length == 0) {
                 $(`#${id}`).html(`<option value="" ${multiple ? "" : "selected"} disabled>Sin opciones</option>`)
                 return

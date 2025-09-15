@@ -3,7 +3,9 @@
 
         const public = {};
 
-        public.vacio = function(id) {
+        public.vacio = function({
+            id
+        }) {
             const $elemento = $(`#${id}`);
             let value = $elemento.val();
             value = Array.isArray(value) ? value.join(', ') : value;
@@ -26,7 +28,9 @@
         };
 
 
-        public.sinCaracteresEspeciales = function(id) {
+        public.sinCaracteresEspeciales = function({
+            id
+        }) {
             let value = $(`#${id}`).val().trim();
             let mensaje = $(`#${id}`).siblings('.invalid-feedback');
 
@@ -40,7 +44,9 @@
             }
         };
 
-        public.soloLetras = function(id) {
+        public.soloLetras = function({
+            id
+        }) {
             value = $(`#${id}`).val().trim();
             mensaje = $(`#${id}`).siblings('.invalid-feedback');
 
@@ -54,7 +60,9 @@
             }
         };
 
-        public.letrasYEspacios = function(id) {
+        public.letrasYEspacios = function({
+            id
+        }) {
             let value = $(`#${id}`).val().trim();
             let mensaje = $(`#${id}`).siblings('.invalid-feedback');
 
@@ -69,7 +77,9 @@
         };
 
 
-        public.soloNumeros = function(id) {
+        public.soloNumeros = function({
+            id
+        }) {
             value = $(`#${id}`).val().trim();
             mensaje = $(`#${id}`).siblings('.invalid-feedback');
 
@@ -83,7 +93,9 @@
             }
         };
 
-        public.email = function(id) {
+        public.email = function({
+            id
+        }) {
             value = $(`#${id}`).val().trim();
             mensaje = $(`#${id}`).siblings('.invalid-feedback');
 
@@ -97,13 +109,16 @@
             }
         };
 
-        public.minCaracteres = function(id, min) {
+        public.carecteresMinimos = function({
+            id,
+            minimo
+        }) {
             value = $(`#${id}`).val().trim();
             mensaje = $(`#${id}`).siblings('.invalid-feedback');
 
-            if (value.length < min) {
+            if (value.length < minimo) {
                 $(`#${id}`).addClass('is-invalid');
-                mensaje.text(`El campo debe tener al menos ${min} caracteres`);
+                mensaje.text(`El campo debe tener al menos ${minimo} caracteres`);
                 return true
             } else {
                 $(`#${id}`).removeClass('is-invalid');
@@ -111,29 +126,32 @@
             }
         };
 
-        public.coincideContraseña = function(id, id2) {
-            value = $(`#${id}`).val().trim();
-            value2 = $(`#${id2}`).val().trim();
-            mensaje = $(`#${id}`).siblings('.invalid-feedback');
-            mensaje2 = $(`#${id2}`).siblings('.invalid-feedback');
+        public.coincideContraseña = function({
+            idOriginal,
+            idCopia
+        }) {
+            value = $(`#${idOriginal}`).val().trim();
+            value2 = $(`#${idCopia}`).val().trim();
+            mensaje = $(`#${idOriginal}`).siblings('.invalid-feedback');
+            mensaje2 = $(`#${idCopia}`).siblings('.invalid-feedback');
 
 
             if (value !== value2) {
-                $(`#${id}`).addClass('is-invalid');
-                $(`#${id2}`).addClass('is-invalid');
+                $(`#${idOriginal}, #${idCopia}`).addClass('is-invalid');
                 mensaje.text("Las contraseñas no coinciden");
                 mensaje2.text("Las contraseñas no coinciden");
                 return true
             } else {
-                $(`#${id}`).removeClass('is-invalid');
-                $(`#${id2}`).removeClass('is-invalid');
+                $(`#${idOriginal}, #${idCopia}`).removeClass('is-invalid');
                 return false
             }
         };
 
 
-        public.formulario = function(formId) {
-            return $(`#${formId} .is-invalid`).length > 0;
+        public.formulario = function({
+            idForm
+        }) {
+            return $(`#${idForm} .is-invalid`).length > 0;
         };
 
 
@@ -141,22 +159,27 @@
             $(".is-invalid").removeClass('is-invalid')
         }
 
-        public.habilitarTiempoReal = function(id, validacion) {
-            $(`.${id}`).each(function() {
+        public.habilitarTiempoReal = function({
+            className,
+            callback
+        }) {
+            $(`.${className}`).each(function() {
                 if ($(this).is("select")) {
                     $(this).on("change", function() {
-                        validacion();
+                        callback();
                     });
                 } else {
                     $(this).on("keyup", function() {
-                        validacion();
+                        callback();
                     });
                 }
             });
         }
 
-        public.deshabilitarTiempoReal = function(id) {
-            $(`.${id}`).each(function() {
+        public.deshabilitarTiempoReal = function({
+            className
+        }) {
+            $(`.${className}`).each(function() {
                 if ($(this).is("select")) {
                     $(this).off("change");
                 } else {
@@ -165,14 +188,35 @@
             });
         }
 
-        public.obligatorios = function(id) {
+        public.obligatorios = function({
+            className
+        }) {
             let faltanCampos = false
 
-            $(`.${id}`).each(function() {
-                if (globalValidar.vacio(this["id"])) faltanCampos = true;
+            $(`.${className}`).each(function() {
+                if (globalValidar.vacio({
+                        id: this["id"]
+                    })) faltanCampos = true;
             });
 
             return faltanCampos
+        }
+
+
+        public.obtenerCambios = function({
+            dataNueva,
+            dataOriginal
+        }) {
+            const cambios = {};
+            Object.keys(dataNueva).forEach(key => {
+                const nuevo = dataNueva[key];
+                const original = dataOriginal[key];
+
+                if (!_.isEqual(nuevo, original)) {
+                    cambios[key] = nuevo;
+                }
+            });
+            return cambios;
         }
 
 

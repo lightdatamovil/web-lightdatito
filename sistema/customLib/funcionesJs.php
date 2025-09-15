@@ -33,16 +33,18 @@
             }).format(precio);
         }
 
-        public.formatearFecha = function(fechaISO) {
-            if (!fechaISO) return fechaISO
-            const fecha = new Date(fechaISO);
+        public.formatearFecha = function({
+            fecha
+        }) {
+            if (!fecha) return fecha
+            const fechaMod = new Date(fecha);
 
-            const dia = String(fecha.getDate()).padStart(2, '0');
-            const mes = String(fecha.getMonth() + 1).padStart(2, '0');
-            const anio = fecha.getFullYear();
+            const dia = String(fechaMod.getDate()).padStart(2, '0');
+            const mes = String(fechaMod.getMonth() + 1).padStart(2, '0');
+            const anio = fechaMod.getFullYear();
 
-            const horas = String(fecha.getHours()).padStart(2, '0');
-            const minutos = String(fecha.getMinutes()).padStart(2, '0');
+            const horas = String(fechaMod.getHours()).padStart(2, '0');
+            const minutos = String(fechaMod.getMinutes()).padStart(2, '0');
 
             return `${dia}/${mes}/${anio} ${horas}:${minutos}`;
         }

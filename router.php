@@ -1,11 +1,11 @@
 <?php
 session_start();
-$logeado = isset($_SESSION["logeado"]) && $_SESSION["logeado"] == true ? 'true' : 'false';
-$jsonData = file_get_contents('sistema/configmenu/menu_default.json');
+$logueado = isset($_SESSION["logueado"]) && $_SESSION["logueado"] == true ? 'true' : 'false';
+$jsonData = file_get_contents('sistema/configMenu/menuDefault.json');
 ?>
 
 <script>
-    const estaLogueado = <?php echo $logeado; ?>;
+    const estaLogueado = <?php echo $logueado; ?>;
     let yaInicializado = false;
 
     const datos = <?php echo $jsonData; ?>;
@@ -24,12 +24,12 @@ $jsonData = file_get_contents('sistema/configmenu/menu_default.json');
 
     routes = {
         ...routes,
-        "perfil": {
-            accion: () => appMiPerfil.open(),
-            titulo: "Perfil"
-        },
+        // "perfil": {
+        //     accion: () => appMiPerfil.open(),
+        //     titulo: "Perfil"
+        // },
         "logout": {
-            accion: () => appSistema.desloguear(),
+            accion: () => appSistema.logout(),
             titulo: "Login"
         },
     };
