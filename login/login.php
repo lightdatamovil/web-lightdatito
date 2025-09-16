@@ -229,7 +229,7 @@
                     success: function(response) {
                         if (response.estado) {
                             localStorage.setItem("userId", response.data.id);
-                            localStorage.setItem("authToken", response.data.authToken);
+                            localStorage.setItem("authToken", response.data.token);
                             localStorage.setItem("userName", response.data.nombre);
                             localStorage.setItem("userPuesto", JSON.stringify((response.data.puestos || []).map(item => item.id)));
 

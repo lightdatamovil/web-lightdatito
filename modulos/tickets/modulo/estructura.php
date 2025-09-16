@@ -38,7 +38,7 @@
                 id: "filtroPrioridad_tickets",
                 multiple: true
             });
-            await globalLlenarSelect.logisticas({
+            await globalLlenarSelect.clientes({
                 id: "filtroCliente_tickets",
                 multiple: true
             });
@@ -57,17 +57,17 @@
                 $("#filtroEstado_tickets").val([1, 2, 3]).change();
             }
 
-            // await appModuloTickets.getListado();
+            await appModuloTickets.getListado();
 
             await globalActivarAcciones.filtrarConEnter({
                 className: "inputs_tickets",
                 callback: appModuloTickets.getListado
             });
-            // await globalOrdenTablas.activar({
-            //     idThead: "theadListado_tickets",
-            //     callback: appModuloUsuarios.getListado,
-            //     defaultOrder: "nombre"
-            // })
+            await globalOrdenTablas.activar({
+                idThead: "theadListado_tickets",
+                callback: appModuloTickets.getListado,
+                defaultOrder: "id"
+            })
             await globalActivarAcciones.select2({
                 className: "select2_tickets"
             })
@@ -125,11 +125,11 @@
                     htmlEstado = `<span class="badge rounded-pill" style="color: white; background-color: ${estado["color"]  || "#6d6d6dff"};">${estado["nombre"] || "S/D"}</span>`
                 }
 
-                htmlLogistica = "S/D"
-                if (reporte.logistica_id) {
-                    logistica = appSistema.logisticas.find(item => item.id == reporte.logistica_id)
-                    htmlLogistica = logistica?.nombre || "S/D"
-                    htmlLogistica += logistica.url_sistema ? `<button type="button" class="btn btn-icon rounded-pill btn-text-secondary ms-1" onclick="appModuloTickets.copiarYRedirigir(event, '${logistica.password_soporte}', '${logistica.url_sistema}')" data-bs-toggle="tooltip" data-bs-placement="top" title="Copiar contraseña e ir a link"><i class="tf-icons ri-external-link-line ri-15px"></i></button>` : "";
+                htmlCliente = "S/D"
+                if (reporte.cliente_id) {
+                    cliente = appSistema.clientes.find(item => item.id == reporte.cliente_id)
+                    htmlCliente = cliente?.nombre || "S/D"
+                    htmlCliente += cliente.url_sistema ? `<button type="button" class="btn btn-icon rounded-pill btn-text-secondary ms-1" onclick="appModuloTickets.copiarYRedirigir(event, '${cliente.password_soporte}', '${cliente.url_sistema}')" data-bs-toggle="tooltip" data-bs-placement="top" title="Copiar contraseña e ir a link"><i class="tf-icons ri-external-link-line ri-15px"></i></button>` : "";
                 }
 
                 htmlUsuario = "S/D"
@@ -163,10 +163,10 @@
                 }
 
 
-                buffer += `<tr style="cursor: pointer;" onclick="appModalTickets.open(1, '${reporte.id}')">`
+                buffer += `<tr style="cursor: pointer;" onclick="appModalTickets.open({mode: 1, did: '${reporte.id}'})">`
                 buffer += `<td>${htmlNroReporte}</td>`
                 buffer += `<td>${globalFuncionesJs.formatearFecha({fecha: reporte.fecha_creacion}) || "S/D"}</td>`
-                buffer += `<td class="text-wrap">${htmlLogistica}</td>`
+                buffer += `<td class="text-wrap">${htmlCliente}</td>`
                 buffer += `<td class="text-wrap">${reporte.titulo || "S/D"}</td>`
                 buffer += `<td class="text-wrap">${htmlTipoTicket}</td>`
                 buffer += `<td>${htmlPrioridad}</td>`
@@ -235,7 +235,7 @@
                 tipo_ticket_id: $("#filtroTipoTicket_tickets").val().join(","),
                 estado_ticket_id: $("#filtroEstado_tickets").val().join(","),
                 prioridad_ticket_id: $("#filtroPrioridad_tickets").val().join(","),
-                logistica_id: $("#filtroCliente_tickets").val().join(","),
+                cliente_id: $("#filtroCliente_tickets").val().join(","),
                 observador: "",
                 fecha_creacion_desde: "",
                 fecha_creacion_hasta: "",
@@ -255,7 +255,7 @@
                     globalPaginado.generar({
                         idBase: "_tickets",
                         meta: g_meta,
-                        estructura: appModuloUsuarios
+                        estructura: appModuloTickets
                     });
                 },
             });

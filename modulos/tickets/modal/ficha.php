@@ -43,19 +43,26 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-12 col-md-6 col-lg-6 position-relative" id="containerCliente_mTickets">
+                                        <div class="col-12 col-md-12 col-lg-12 position-relative" id="containerCliente_mTickets">
                                             <div id="btnAbrirSistema_mTickets" class="position-absolute" style="top: 5px; right: 2rem; z-index: 10;"></div>
                                             <div class="form-floating form-floating-outline">
-                                                <select id="cliente_mTickets" class="form-select select2_mTickets campos_mTickets camposObli_mTickets"></select>
-                                                <label for="cliente_mTickets">Cliente</label>
+                                                <select id="cliente_mTickets" class="form-select select2_mTickets campos_mTickets camposObli_mTickets" multiple onchange="appModalTickets.manejarSelectTodos(this)"></select>
+                                                <label for="cliente_mTickets">Clientes</label>
                                                 <div class="invalid-feedback">Debe seleccionar al menos uno</div>
                                             </div>
                                         </div>
 
-                                        <div class="col-12 col-md-6 col-lg-6 containersSoporte_mTickets">
+                                        <div class="col-12 col-md-6 col-lg-6">
                                             <div class="form-floating form-floating-outline">
                                                 <select id="asignar_mTickets" class="form-select select2_mTickets campos_mTickets"></select>
                                                 <label for="asignar_mTickets">Asignado a</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-md-6 col-lg-6">
+                                            <div class="form-floating form-floating-outline">
+                                                <select id="observadores_mTickets" class="form-select select2_mTickets campos_mTickets" multiple></select>
+                                                <label for="observadores_mTickets">Observadores</label>
                                             </div>
                                         </div>
 

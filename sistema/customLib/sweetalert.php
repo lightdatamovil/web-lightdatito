@@ -170,12 +170,12 @@
             metodo
         }) {
             const link = window.location.href;
-            const perfil = appSistema.perfiles[appSistema.perfilUser];
+            const perfil = appSistema.userPuesto;
             const titulo = error.responseJSON?.title;
             const mensaje = error.responseJSON?.message;
             const codigo = error.status;
 
-            const errorMsg = encodeURIComponent(`Estimado/a,\nMe comunico con el fin de reportar un problema en el sistema de Fulfillment\n\n*Link:* ${link || "No disponible"}\n*Titulo:* ${titulo || "No disponible"}\n*Mensaje:* ${mensaje || "No disponible"}\n*Codigo de error:* ${codigo || "No disponible"}\n*Ruta:* ${ruta || "No disponible"}\n*Metodo:* ${metodo || "No disponible"}\n*Usuario:* ${appSistema.usernameUser || "No disponible"} (${appSistema.didUser || "No disponible"})\n*Rol:* ${perfil || "No disponible"}\n\nEspero su respuesta,\nMuchas gracias.`);
+            const errorMsg = encodeURIComponent(`Equipo de desarrollo,\nMe comunico con el fin de reportar un problema en el sistema de LightdaTito\n\n*Link:* ${link || "No disponible"}\n*Titulo:* ${titulo || "No disponible"}\n*Mensaje:* ${mensaje || "No disponible"}\n*Codigo de error:* ${codigo || "No disponible"}\n*Ruta:* ${ruta || "No disponible"}\n*Metodo:* ${metodo || "No disponible"}\n*Usuario:* ${appSistema.userName || "No disponible"} (${appSistema.userId || "No disponible"})\n*Rol:* ${perfil || "No disponible"}\n\nEspero su respuesta,\nMuchas gracias.`);
             const buffer = `<a class="btn rounded-pill btn-label-success waves-effect" href="https://wa.me/?text=${errorMsg}" target="_blank"><span class="tf-icons ri-customer-service-2-fill ri-16px me-2"></span>Reportar error</a>`
 
             Swal.fire({

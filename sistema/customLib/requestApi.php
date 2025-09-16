@@ -28,6 +28,7 @@
                     },
                     error: function(xhr) {
                         globalSweetalert.errorReportable({
+                            error: xhr,
                             ruta: this.url,
                             metodo: this.type
                         });

@@ -31,14 +31,14 @@
 
                 <div class="col-12 col-md-6 col-lg-3">
                     <div class="form-floating form-floating-outline">
-                        <select id="filtroPrioridad_tickets" multiple class="form-select select2_tickets campos_tickets select_tickets"></select>
+                        <select id="filtroPrioridad_tickets" multiple class="form-select select2_tickets campos_tickets select_tickets" data-placeholder="Buscar por SLA"></select>
                         <label for="filtroPrioridad_tickets">SLA</label>
                     </div>
                 </div>
 
                 <div class="col-12 col-md-6 col-lg-3">
                     <div class="form-floating form-floating-outline">
-                        <select id="filtroEstado_tickets" multiple class="form-select select2_tickets campos_tickets select_tickets"></select>
+                        <select id="filtroEstado_tickets" multiple class="form-select select2_tickets campos_tickets select_tickets" data-placeholder="Buscar por estado"></select>
                         <label for="filtroEstado_tickets">Estado</label>
                     </div>
                 </div>
@@ -48,20 +48,20 @@
             <div class="row g-3 mb-3 align-items-center">
                 <div class="col-12 col-md-12 col-lg-4">
                     <div class="form-floating form-floating-outline">
-                        <select id="filtroCliente_tickets" multiple class="form-select select2_tickets campos_tickets select_tickets"></select>
+                        <select id="filtroCliente_tickets" multiple class="form-select select2_tickets campos_tickets select_tickets" data-placeholder="Buscar por cliente"></select>
                         <label for="filtroCliente_tickets">Cliente</label>
                     </div>
                 </div>
                 <div class="col-12 col-md-6 col-lg-3">
                     <div class="form-floating form-floating-outline">
-                        <select id="filtroTipoTicket_tickets" multiple class="form-select select2_tickets campos_tickets select_tickets"></select>
+                        <select id="filtroTipoTicket_tickets" multiple class="form-select select2_tickets campos_tickets select_tickets" data-placeholder="Buscar por cicuito/modulo"></select>
                         <label for="filtroTipoTicket_tickets">Circuito/Modulo</label>
                     </div>
                 </div>
 
                 <div class="col-12 col-md-6 col-lg-3 containerUsuarioSoporte_tickets">
                     <div class="form-floating form-floating-outline">
-                        <select id="filtroUsuario_tickets" multiple class="form-select select2_tickets campos_tickets select_tickets"></select>
+                        <select id="filtroUsuario_tickets" multiple class="form-select select2_tickets campos_tickets select_tickets" data-placeholder="Buscar por usuario asignado"></select>
                         <label for="filtroUsuario_tickets">Usuario asignado</label>
                     </div>
                 </div>
@@ -89,7 +89,7 @@
                     <tr>
                         <th data-order="id">N°</th>
                         <th data-order="fecha_creacion">Fecha</th>
-                        <th data-order="logistica_id">Cliente</th>
+                        <th data-order="cliente_id">Cliente</th>
                         <th data-order="titulo">Titulo</th>
                         <th data-order="tipo_ticket_id">Circuito</th>
                         <th data-order="prioridad_ticket_id">SLA</th>

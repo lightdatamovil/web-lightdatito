@@ -145,7 +145,7 @@
         public.close = function() {
             setTimeout(() => {
                 $('#containerLoading').modal('hide');
-            }, 200);
+            }, 500);
         };
 
         return public;

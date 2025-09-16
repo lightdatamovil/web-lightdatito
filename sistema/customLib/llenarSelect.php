@@ -45,11 +45,11 @@
             $(`#${id}`).html(buffer)
         }
 
-        public.logisticas = function({
+        public.clientes = function({
             id,
             multiple = false
         }) {
-            if (appSistema.logisticas.length == 0) {
+            if (appSistema.clientes.length == 0) {
                 $(`#${id}`).html(`<option value="" ${multiple ? "" : "selected"} disabled>Sin clientes</option>`)
                 return
             }
@@ -59,14 +59,41 @@
                 buffer = `<option value="" selected>Seleccionar cliente</option>`
             }
 
-            const listaOrdenada = [...appSistema.logisticas].sort((a, b) => {
+            const listaOrdenada = [...appSistema.clientes].sort((a, b) => {
                 const nombreA = (a.nombre || "").toLowerCase()
                 const nombreB = (b.nombre || "").toLowerCase()
                 return nombreA.localeCompare(nombreB)
             })
 
-            for (const logistica of listaOrdenada) {
-                buffer += `<option value="${logistica.id}">${logistica.nombre || "Sin nombre"}</option>`
+            for (const cliente of listaOrdenada) {
+                buffer += `<option value="${cliente.id}">${cliente.nombre || "Sin nombre"}</option>`
+            }
+
+            $(`#${id}`).html(buffer)
+        }
+
+        public.usuarios = function({
+            id,
+            multiple = false
+        }) {
+            if (appSistema.usuarios.length == 0) {
+                $(`#${id}`).html(`<option value="" ${multiple ? "" : "selected"} disabled>Sin usuarios</option>`)
+                return
+            }
+
+            buffer = ""
+            if (!multiple) {
+                buffer = `<option value="" selected>Seleccionar usuario</option>`
+            }
+
+            const listaOrdenada = [...appSistema.usuarios].sort((a, b) => {
+                const nombreA = (a.nombre || "").toLowerCase()
+                const nombreB = (b.nombre || "").toLowerCase()
+                return nombreA.localeCompare(nombreB)
+            })
+
+            for (usuario of listaOrdenada) {
+                buffer += `<option value="${usuario["id"]}">${usuario["nombre"] || "Sin nombre"}</option>`
             }
 
             $(`#${id}`).html(buffer)

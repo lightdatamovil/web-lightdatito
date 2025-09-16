@@ -49,19 +49,22 @@
 
                 const $modalParent = $(this).closest('.modal');
 
-                if ($modalParent.length) {
-                    $(this).select2({
-                        dropdownParent: $modalParent,
-                        dropdownCssClass: 'select2-inside-modal',
-                        width: '100%'
-                    });
-                } else {
-                    $(this).select2({
-                        width: '100%'
-                    });
+                const config = {
+                    width: '100%',
+                };
+
+                if ($(this).prop("multiple")) {
+                    config.placeholder = $(this).data('placeholder') || "Seleccione una o varias opciones";
                 }
+
+                if ($modalParent.length) {
+                    config.dropdownParent = $modalParent;
+                    config.dropdownCssClass = 'select2-inside-modal';
+                }
+
+                $(this).select2(config);
             });
-        }
+        };
 
         public.activarPrimerTab = function({
             tabList

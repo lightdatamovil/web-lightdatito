@@ -23,7 +23,7 @@
             buffer = ""
             buffer += `<tr>`
             buffer += `<td colspan="${cantidadColumnas}">`
-            buffer += `<div class="d-flex justify-content-center align-items-center" style="height: 409px; gap: 1.3rem;">`
+            buffer += `<div class="d-flex justify-content-center align-items-center" style="height: 400px; gap: 1.3rem;">`
             buffer += `<div>`
 
             if (appSistema.userPuesto.includes(1)) {

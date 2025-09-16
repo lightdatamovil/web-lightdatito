@@ -2,12 +2,12 @@
     let sistemaIniciado = false;
     const appSistema = {
 
-        urlServer: "https://node1.liit.com.ar/api",
+        urlServer: "http://localhost:13000/api",
         userName: localStorage.getItem("userName"),
         userId: localStorage.getItem("userId") * 1,
         userPuesto: JSON.parse(localStorage.getItem("userPuesto")),
         authToken: localStorage.getItem("authToken"),
-        logisticas: [],
+        clientes: [],
         usuarios: [],
         prioridades: [],
         estadosTickets: [],
@@ -30,13 +30,13 @@
         },
 
         cargarDatos: async function() {
-            await globalRequest.get(`/init`, {
+            await globalRequest.get(`/preload`, {
                 onSuccess: (result) => {
-                    this.logisticas = result.body.logisticas
-                    this.usuarios = result.body.usuarios
-                    this.prioridades = result.body.prioridades
-                    this.estadosTickets = result.body.estados_ticket
-                    this.tipoTicket = result.body.tipo_ticket
+                    this.clientes = result.data.clientesLightdata
+                    this.usuarios = result.data.usuarios
+                    this.prioridades = result.data.prioridades
+                    this.estadosTickets = result.data.estados_ticket
+                    this.tipoTicket = result.data.tipo_ticket
                 },
             });
         },

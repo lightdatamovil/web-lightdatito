@@ -510,12 +510,42 @@ if (typeof $ !== "undefined") {
                 var searchJson = "search-horizontal.json" // For vertical layout
             }
             // Search API AJAX call
-            var searchData = $.ajax({
+            var searchDataRaw = $.ajax({
                 // url: assetsPath + "json/" + searchJson, //? Use your own search api instead
-                url: assetsPath + "../../sistema/configmenu/valoresBuscador.json",
+                url: assetsPath + "../../sistema/configMenu/menuDefault.json",
                 dataType: "json",
                 async: false,
             }).responseJSON
+
+            //! NUEVO PARA USAR MENUDEFAULT
+            function flattenMenu(json) {
+                const result = []
+
+                function recorrer(items, parentName = "") {
+                    items.forEach((i) => {
+                        // Solo agregamos hijos que no tengan más hijos (o todos, según quieras)
+                        if (i.hijos && i.hijos.length > 0) {
+                            recorrer(i.hijos, parentName ? parentName + " > " + i.nombre : i.nombre)
+                        } else {
+                            result.push({
+                                name: parentName ? parentName + " > " + i.nombre : i.nombre,
+                                icon: i.icono,
+                                ruta: i.ruta,
+                                url: i.accion,
+                            })
+                        }
+                    })
+                }
+
+                recorrer(json)
+                return result
+            }
+
+            var searchData = {
+                pages: flattenMenu(searchDataRaw),
+            }
+            //! /NUEVO PARA USAR MENUDEFAULT
+
             // Init typeahead on searchInput
             searchInput.each(function () {
                 var $this = $(this)

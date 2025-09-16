@@ -1,6 +1,6 @@
 <script>
     const appModalTickets = (function() {
-        let g_id = 0;
+        let g_did = 0;
         let g_data;
         let donde = 0;
         let opcionAnterior = 0;
@@ -13,17 +13,24 @@
             did = 0
         } = {}) {
             await resetModal();
-            g_id = id * 1;
+            g_did = did * 1;
             donde = mode
 
-            await globalLlenarSelect.logisticas({
-                id: "cliente_mTickets"
+            await globalLlenarSelect.clientes({
+                id: "cliente_mTickets",
+                multiple: true
             })
+            $("#cliente_mTickets").prepend('<option value="todos">Todos</option>');
             await globalLlenarSelect.prioridades({
                 id: "prioridad_mTickets"
             })
             await globalLlenarSelect.desarrolladores({
                 id: "asignar_mTickets"
+            })
+
+            await globalLlenarSelect.usuarios({
+                id: "observadores_mTickets",
+                multiple: true
             })
             await globalLlenarSelect.tiposTickets({
                 id: "tipoTicket_mTickets"
@@ -44,7 +51,7 @@
             } else {
                 // VER TICKET
                 await globalLoading.open()
-                $("#tituloModal_mTickets").text(`Ticket N° ${id}`);
+                $("#tituloModal_mTickets").text(`Ticket N° ${did}`);
                 $('.campos_mTickets').prop('disabled', true);
                 $(".containersVerTicket_mTickets").removeClass("ocultar");
                 $("#asignadoPor_mTickets, #estado_mTickets").text("").removeClass("ocultar")
@@ -52,11 +59,9 @@
                 if (appSistema.userPuesto.includes(1)) {
                     $(".containersDesarrollo_mTickets").removeClass("ocultar");
                     $(".containersSoporte_mTickets").addClass("ocultar");
-                    $("#containerCliente_mTickets").removeClass("col-md-6 col-lg-6").addClass("col-md-12 col-lg-12")
                 } else {
                     $(".containersSoporte_mTickets").removeClass("ocultar");
                     $(".containersDesarrollo_mTickets").addClass("ocultar");
-                    $("#containerCliente_mTickets").removeClass("col-md-12 col-lg-12").addClass("col-md-6 col-lg-6")
                 }
                 await get()
             }
@@ -65,6 +70,22 @@
                 idContainer: "modal_mTickets"
             })
         }
+
+        public.manejarSelectTodos = function(select) {
+            let valores = Array.from(select.value ? $(select).val() : []);
+
+            console.log(valores);
+
+
+            if (valores.includes("todos") && valores.length > 1) {
+                // Si está "todos" junto con otras, dejar solo "todos"
+                $(select).val(["todos"]).trigger("change.select2");
+            } else if (valores.length > 1 && valores.includes("todos")) {
+                // Si elegiste otra opción, quitar "todos"
+                $(select).val(valores.filter(v => v !== "todos")).trigger("change.select2");
+            }
+        }
+
 
         public.cerrarModal = function() {
             let huboCambios = false;
@@ -98,7 +119,7 @@
         }
 
         function get() {
-            globalRequest.get(`/${rutaAPI}/${g_id}`, {
+            globalRequest.get(`/${rutaAPI}/${g_did}`, {
                 onSuccess: function(result) {
                     g_data = result.data;
                     llenarCampos()
@@ -125,11 +146,11 @@
             }
 
             $("#titulo_mTickets").val(g_data.titulo);
-            if (g_data.logistica_id) {
-                $("#cliente_mTickets").val(g_data.logistica_id).trigger("change");
-                logistica = appSistema.logisticas.find(item => item.id == g_data.logistica_id)
-                htmlLogistica = logistica.url_sistema ? `<button type="button" class="btn btn-icon rounded-pill btn-text-secondary ms-1" onclick="appModalTickets.copiarYRedirigir(event, '${logistica.password_soporte}', '${logistica.url_sistema}')" data-bs-toggle="tooltip" data-bs-placement="top" title="Copiar contraseña e ir a link"><i class="tf-icons ri-external-link-line ri-15px"></i></button>` : "";
-                $("#btnAbrirSistema_mTickets").html(htmlLogistica).removeClass("ocultar")
+            if (g_data.cliente_id) {
+                $("#cliente_mTickets").val(g_data.cliente_id).trigger("change");
+                cliente = appSistema.clientes.find(item => item.id == g_data.cliente_id)
+                htmlCliente = cliente.url_sistema ? `<button type="button" class="btn btn-icon rounded-pill btn-text-secondary ms-1" onclick="appModalTickets.copiarYRedirigir(event, '${cliente.password_soporte}', '${cliente.url_sistema}')" data-bs-toggle="tooltip" data-bs-placement="top" title="Copiar contraseña e ir a link"><i class="tf-icons ri-external-link-line ri-15px"></i></button>` : "";
+                $("#btnAbrirSistema_mTickets").html(htmlCliente).removeClass("ocultar")
             }
 
             $("#prioridad_mTickets").val(g_data.prioridad_ticket_id).trigger("change");
@@ -398,15 +419,18 @@
         }
 
         public.guardar = function() {
+            cliente = $("#cliente_mTickets").val()
+
             const datos = {
-                "titulo": $("#titulo_mTickets").val(),
-                "fecha_limite": $("#fechaLimite_mTickets").val() ? $("#fechaLimite_mTickets").val().replace("T", " ") + ":00" : null,
-                "logistica_id": $("#cliente_mTickets").val() * 1,
-                "prioridad_ticket_id": $("#prioridad_mTickets").val() * 1,
-                "tipo_ticket_id": $("#tipoTicket_mTickets").val() * 1,
-                "usuario_asignado_id": $("#asignar_mTickets").val() * 1,
-                "descripcion": $("#descripcion_mTickets").val(),
-                "quien": appSistema.userId
+                titulo: $("#titulo_mTickets").val(),
+                fecha_limite: $("#fechaLimite_mTickets").val() ? $("#fechaLimite_mTickets").val().replace("T", " ") + ":00" : null,
+                clientes_lightdata_ids: cliente !== "todas" ? cliente : [],
+                prioridad_ticket_id: $("#prioridad_mTickets").val() * 1,
+                tipo_ticket_id: $("#tipoTicket_mTickets").val() * 1,
+                usuario_asignado_id: $("#asignar_mTickets").val() * 1,
+                descripcion: $("#descripcion_mTickets").val(),
+                modo_asociacion: "",
+                observadores_ids: []
             };
 
             globalValidar.habilitarTiempoReal({
@@ -449,7 +473,7 @@
             const datosNuevos = {
                 "titulo": $("#titulo_mTickets").val(),
                 "fecha_limite": $("#fechaLimite_mTickets").val() ? $("#fechaLimite_mTickets").val().replace("T", " ") + ":00" : null,
-                "logistica_id": $("#cliente_mTickets").val() * 1,
+                "cliente_id": $("#cliente_mTickets").val() * 1,
                 "prioridad_ticket_id": $("#prioridad_mTickets").val() * 1,
                 "tipo_ticket_id": $("#tipoTicket_mTickets").val() * 1,
                 "usuario_asignado_id": $("#asignar_mTickets").val() * 1,
