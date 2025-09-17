@@ -62,6 +62,24 @@
             return `${year}-${month}-${day}T${hours}:${minutes}`;
         }
 
+        public.copiarTexto = function({
+            event,
+            copiar
+        }) {
+            event.stopPropagation();
+            navigator.clipboard.writeText(copiar)
+        }
+
+        public.copiarYRedirigir = function({
+            event,
+            copiar,
+            redirigir
+        }) {
+            event.stopPropagation();
+            navigator.clipboard.writeText(copiar)
+            window.open(redirigir, "_blank");
+        }
+
         return public;
 
     }())

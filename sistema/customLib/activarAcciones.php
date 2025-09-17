@@ -104,6 +104,15 @@
             });
         }
 
+        public.toggleOffcanvas = function({
+            id
+        }) {
+            const offcanvasEl = document.getElementById(id);
+            if (!offcanvasEl) return;
+            const offcanvas = bootstrap.Offcanvas.getOrCreateInstance(offcanvasEl);
+            offcanvas.toggle();
+        }
+
         return public
     }())
 </script>

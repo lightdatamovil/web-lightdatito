@@ -43,26 +43,12 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-12 col-md-12 col-lg-12 position-relative" id="containerCliente_mTickets">
+                                        <div class="col-12 col-md-12 col-lg-12 position-relative" id="containerclientes_mTickets">
                                             <div id="btnAbrirSistema_mTickets" class="position-absolute" style="top: 5px; right: 2rem; z-index: 10;"></div>
                                             <div class="form-floating form-floating-outline">
-                                                <select id="cliente_mTickets" class="form-select select2_mTickets campos_mTickets camposObli_mTickets" multiple onchange="appModalTickets.manejarSelectTodos(this)"></select>
-                                                <label for="cliente_mTickets">Clientes</label>
+                                                <select id="clientes_mTickets" class="form-select select2_mTickets campos_mTickets camposObli_mTickets" multiple onchange="appModalTickets.manejarSelectTodos(this)"></select>
+                                                <label for="clientes_mTickets">Clientes</label>
                                                 <div class="invalid-feedback">Debe seleccionar al menos uno</div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-12 col-md-6 col-lg-6">
-                                            <div class="form-floating form-floating-outline">
-                                                <select id="asignar_mTickets" class="form-select select2_mTickets campos_mTickets"></select>
-                                                <label for="asignar_mTickets">Asignado a</label>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-12 col-md-6 col-lg-6">
-                                            <div class="form-floating form-floating-outline">
-                                                <select id="observadores_mTickets" class="form-select select2_mTickets campos_mTickets" multiple></select>
-                                                <label for="observadores_mTickets">Observadores</label>
                                             </div>
                                         </div>
 
@@ -81,9 +67,32 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-12 col-md-12 col-lg-12">
+                                        <div class="col-12 col-md-6 col-lg-6">
                                             <div class="form-floating form-floating-outline">
-                                                <select id="tipoTicket_mTickets" class="form-select select2_mTickets campos_mTickets camposObli_mTickets"></select>
+                                                <select id="asignar_mTickets" class="form-select select2_mTickets campos_mTickets"></select>
+                                                <label for="asignar_mTickets">Asignado a</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-md-6 col-lg-6">
+                                            <div class="form-floating form-floating-outline">
+                                                <select id="observadores_mTickets" class="form-select select2_mTickets campos_mTickets" multiple></select>
+                                                <label for="observadores_mTickets">Observadores</label>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-12 col-md-6 col-lg-6">
+                                            <div class="form-floating form-floating-outline">
+                                                <select id="proyecto_mTickets" class="form-select select2_mTickets campos_mTickets camposObli_mTickets" multiple></select>
+                                                <label for="proyecto_mTickets">Proyecto</label>
+                                                <div class="invalid-feedback">Debe seleccionar al menos uno</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-md-6 col-lg-6">
+                                            <div class="form-floating form-floating-outline">
+                                                <select id="tipoTicket_mTickets" class="form-select select2_mTickets campos_mTickets camposObli_mTickets" multiple></select>
                                                 <label for="tipoTicket_mTickets">Modulo/Circuito</label>
                                                 <div class="invalid-feedback">Debe seleccionar al menos uno</div>
                                             </div>
@@ -114,7 +123,7 @@
                                             data-bs-target="#tabGeneral_mTickets"
                                             aria-controls="tabGeneral_mTickets"
                                             aria-selected="true">
-                                            <span class="d-none d-sm-block"><i class="tf-icons ri-feedback-line me-2"></i>Feedback</span>
+                                            <span class="d-none d-sm-block"><i class="tf-icons ri-feedback-line me-2"></i>Acciones</span>
                                             <i class="ri-feedback-line ri-20px d-sm-none"></i>
                                         </button>
                                     </li>
@@ -123,29 +132,12 @@
 
                             <div class="tab-content p-0">
                                 <div class="tab-pane fade show active" id="tabGeneral_mTickets" role="tabpanel">
-                                    <form class="row g-5 align-items-baseline" onsubmit="return false" id="containerGeneralInputsFeedback_mTickets">
+                                    <form class="row g-5 align-items-baseline" onsubmit="return false">
 
-                                        <div class="col-12 col-md-12 col-lg-12 containersInputFeedback_mTickets" id="containerDevolucion_mTickets">
+                                        <div class="col-12 col-md-12 col-lg-12">
                                             <div class="form-floating form-floating-outline">
-                                                <textarea class="form-control camposFeedback_mTickets" style="height: 176px;" data-tipoComentario="2" id="devolucion_mTickets" placeholder="Completar"></textarea>
-                                                <label for="devolucion_mTickets">Devolucion a soporte</label>
-                                                <div class="invalid-feedback">Debe completar el campo</div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-12 col-md-12 col-lg-12 containersInputFeedback_mTickets" id="containerQueHice_mTickets">
-                                            <div class="form-floating form-floating-outline">
-                                                <textarea class="form-control camposFeedback_mTickets" style="height: 176px;" data-tipoComentario="3" id="queHice_mTickets" placeholder="Completar"></textarea>
-                                                <label for="queHice_mTickets">Que se hizo</label>
-                                                <div class="invalid-feedback">Debe completar el campo</div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-12 col-md-12 col-lg-12 containersInputFeedback_mTickets" id="containerFeedback_mTickets">
-                                            <div class="form-floating form-floating-outline">
-                                                <textarea class="form-control camposFeedback_mTickets" style="height: 176px;" data-tipoComentario="4" id="feedback_mTickets" placeholder="Completar"></textarea>
-                                                <label for="feedback_mTickets">Feedback</label>
-                                                <div class="invalid-feedback">Debe completar el campo</div>
+                                                <textarea class="form-control" style="height: 120px;" id="nuevoComentario_mTickets" placeholder="Agregar un cometario..."></textarea>
+                                                <label for="nuevoComentario_mTickets">Nuevo comentario</label>
                                             </div>
                                         </div>
 
@@ -180,7 +172,7 @@
                                     <button id="btnEliminarTicket_mTickets" type="button" class="btn btn-icon rounded-pill btn-label-danger" onclick="appModalTickets.eliminar()" data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar">
                                         <i class="tf-icons ri-delete-bin-6-line ri-22px"></i>
                                     </button>
-                                    <button id="btnCerrarTicket_mTickets" type="button" class="btn btn-icon rounded-pill btn-label-info ms-3" onclick="appModalTickets.renderCambioEstado(3)" data-bs-toggle="tooltip" data-bs-placement="top" title="Cerrar">
+                                    <button id="btnCerrarTicket_mTickets" type="button" class="btn btn-icon rounded-pill btn-label-info ms-3" onclick="appOffCanvasTicket.open()" data-bs-toggle="tooltip" data-bs-placement="top" title="Cerrar">
                                         <i class="tf-icons ri-check-double-line ri-22px"></i>
                                     </button>
                                 </div>
@@ -208,4 +200,7 @@
             </div>
         </div>
     </div>
+
+    <?php include("modulos/tickets/offCanvas/ficha.php"); ?>
+
 </div>

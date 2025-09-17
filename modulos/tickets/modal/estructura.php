@@ -4,6 +4,7 @@
         let g_data;
         let donde = 0;
         let opcionAnterior = 0;
+        let clientesSeleccionados = []
         const rutaAPI = "tickets"
 
         const public = {};
@@ -17,10 +18,10 @@
             donde = mode
 
             await globalLlenarSelect.clientes({
-                id: "cliente_mTickets",
+                id: "clientes_mTickets",
                 multiple: true
             })
-            $("#cliente_mTickets").prepend('<option value="todos">Todos</option>');
+            $("#clientes_mTickets").prepend('<option value="todos">Todos</option>');
             await globalLlenarSelect.prioridades({
                 id: "prioridad_mTickets"
             })
@@ -33,10 +34,8 @@
                 multiple: true
             })
             await globalLlenarSelect.tiposTickets({
-                id: "tipoTicket_mTickets"
-            })
-            await globalActivarAcciones.select2({
-                className: "select2_mTickets"
+                id: "tipoTicket_mTickets",
+                multiple: true
             })
 
             if (mode == 0) {
@@ -66,7 +65,11 @@
                 await get()
             }
 
-            globalActivarAcciones.tooltips({
+            await globalActivarAcciones.select2({
+                className: "select2_mTickets"
+            })
+
+            await globalActivarAcciones.tooltips({
                 idContainer: "modal_mTickets"
             })
         }
@@ -74,18 +77,17 @@
         public.manejarSelectTodos = function(select) {
             let valores = Array.from(select.value ? $(select).val() : []);
 
-            console.log(valores);
-
-
-            if (valores.includes("todos") && valores.length > 1) {
-                // Si está "todos" junto con otras, dejar solo "todos"
+            if (!clientesSeleccionados.includes("todos") && valores.includes("todos")) {
+                clientesSeleccionados = valores
                 $(select).val(["todos"]).trigger("change.select2");
-            } else if (valores.length > 1 && valores.includes("todos")) {
-                // Si elegiste otra opción, quitar "todos"
-                $(select).val(valores.filter(v => v !== "todos")).trigger("change.select2");
+            } else if (clientesSeleccionados.includes("todos") && valores.length > 1) {
+                clientesSeleccionados = valores
+                $(select).val(clientesSeleccionados.filter(v => v !== "todos")).trigger("change.select2");
+            } else {
+                clientesSeleccionados = valores
             }
-        }
 
+        }
 
         public.cerrarModal = function() {
             let huboCambios = false;
@@ -129,8 +131,8 @@
             });
         }
 
-        async function llenarCampos() {
-            $("#btnCopiarTitulo_mTickets").html(`<button type="button" class="btn btn-icon rounded-pill btn-text-dark ms-1" onclick="appModalTickets.copiarTexto(event, 'Ticket N° ${g_data.id}')" data-bs-toggle="tooltip" data-bs-placement="top" title="Copiar"><i class="tf-icons ri-file-copy-line ri-22px"></i></button>`)
+        function llenarCampos() {
+            $("#btnCopiarTitulo_mTickets").html(`<button type="button" class="btn btn-icon rounded-pill btn-text-dark ms-1" onclick="globalFuncionesJs.copiarTexto({event, copiar: 'Ticket N° ${g_data.id}'})" data-bs-toggle="tooltip" data-bs-placement="top" title="Copiar"><i class="tf-icons ri-file-copy-line ri-22px"></i></button>`)
             $("#subtitulo_mTickets").text(`Fecha de creacion: ${globalFuncionesJs.formatearFecha({fecha: g_data.fecha_creacion})}`);
 
             if (g_data.quien) {
@@ -147,9 +149,9 @@
 
             $("#titulo_mTickets").val(g_data.titulo);
             if (g_data.cliente_id) {
-                $("#cliente_mTickets").val(g_data.cliente_id).trigger("change");
+                $("#clientes_mTickets").val(g_data.cliente_id).trigger("change");
                 cliente = appSistema.clientes.find(item => item.id == g_data.cliente_id)
-                htmlCliente = cliente.url_sistema ? `<button type="button" class="btn btn-icon rounded-pill btn-text-secondary ms-1" onclick="appModalTickets.copiarYRedirigir(event, '${cliente.password_soporte}', '${cliente.url_sistema}')" data-bs-toggle="tooltip" data-bs-placement="top" title="Copiar contraseña e ir a link"><i class="tf-icons ri-external-link-line ri-15px"></i></button>` : "";
+                htmlCliente = cliente.url_sistema ? `<button type="button" class="btn btn-icon rounded-pill btn-text-secondary ms-1" onclick="globalFuncionesJs.copiarYRedirigir({event, copiar: '${cliente.password_soporte}', redirigir: '${cliente.url_sistema}'})" data-bs-toggle="tooltip" data-bs-placement="top" title="Copiar contraseña e ir a link"><i class="tf-icons ri-external-link-line ri-15px"></i></button>` : "";
                 $("#btnAbrirSistema_mTickets").html(htmlCliente).removeClass("ocultar")
             }
 
@@ -166,7 +168,7 @@
             $("#tipoTicket_mTickets").val(g_data.tipo_ticket_id).trigger("change");
             $("#descripcion_mTickets").val(g_data.descripcion);
 
-            appModalTickets.renderFeedback()
+            appModalTickets.renderAcciones()
 
             globalActivarAcciones.tooltips({
                 idContainer: "modal_mTickets"
@@ -180,10 +182,13 @@
             })
 
             opcionAnterior = 0
+            clientesSeleccionados = []
             $(".campos_mTickets").val("")
+            $("select.select2_mTickets[multiple]").val(null).trigger("change");
             $("#btnCopiarTitulo_mTickets, #btnAbrirSistema_mTickets").empty()
             $("#asignadoPor_mTickets, #estado_mTickets").text("").addClass("ocultar")
-            $(".containersBtnModificar_mTickets, #containerGeneralFeedback_mTickets, #containerBtnsFooter_mTickets").addClass("ocultar")
+            $(".containersBtnModificar_mTickets, #containerGeneralFeedback_mTickets, #containerBtnsFooter_mTickets, #containerFechaLimite_mTickets").addClass("ocultar")
+            $("#containerPrioridad_mTickets").removeClass("col-md-6 col-lg-6").addClass("col-md-12 col-lg-12")
             $("#containerGeneralGeneral_mTickets").removeClass("col-lg-6").addClass("col-lg-12")
             $("#modalGeneral_mTickets").removeClass("modal-xl").addClass("modal-lg")
             $("#modalContent_mTickets").css("border", "0")
@@ -201,21 +206,24 @@
         public.onChangePrioridad = function(opcion) {
             const opcionSeleccionada = opcion.value
 
-            if (!appSistema.userPuesto.includes(5) && opcionSeleccionada == 5 && opcionAnterior != 5) {
-                globalLlenarSelect.boxStaff({
-                    id: "asignar_mTickets"
-                })
-                cambiarFechaLimite(48)
-            } else if (opcionAnterior == 5) {
-                globalLlenarSelect.desarrolladores({
-                    id: "asignar_mTickets"
-                })
-                prioridad = appSistema.prioridades.find(item => item.id == opcionSeleccionada)
-                cambiarFechaLimite(prioridad.tiempo_estimado_horas)
-            } else {
-                prioridad = appSistema.prioridades.find(item => item.id == opcionSeleccionada)
-                cambiarFechaLimite(prioridad.tiempo_estimado_horas)
+            if (opcionSeleccionada != "") {
+                if (!appSistema.userPuesto.includes(5) && opcionSeleccionada == 5 && opcionAnterior != 5) {
+                    globalLlenarSelect.boxStaff({
+                        id: "asignar_mTickets"
+                    })
+                    cambiarFechaLimite(48)
+                } else if (opcionAnterior == 5) {
+                    globalLlenarSelect.desarrolladores({
+                        id: "asignar_mTickets"
+                    })
+                    prioridad = appSistema.prioridades.find(item => item.id == opcionSeleccionada)
+                    cambiarFechaLimite(prioridad.tiempo_estimado_horas)
+                } else {
+                    prioridad = appSistema.prioridades.find(item => item.id == opcionSeleccionada)
+                    cambiarFechaLimite(prioridad.tiempo_estimado_horas)
+                }
             }
+
 
             if (opcionSeleccionada == "" || opcionSeleccionada == 1) {
                 $("#containerPrioridad_mTickets").removeClass("col-md-6 col-lg-6").addClass("col-md-12 col-lg-12")
@@ -244,7 +252,6 @@
 
             $(`#fechaLimite_mTickets`).val(fechaFormateada);
         }
-
 
         public.renderCambioEstado = function(type) {
 
@@ -300,10 +307,16 @@
             }
         }
 
+        public.renderAcciones = function() {
+            $("#containerGeneralGeneral_mTickets").removeClass("col-lg-12").addClass("col-lg-6");
+            $("#modalGeneral_mTickets").removeClass("modal-lg").addClass("modal-xl");
+            $("#nuevoComentario_mTickets").val("")
+            $("#containerGeneralFeedback_mTickets").removeClass("ocultar")
+        }
+
         public.renderFeedback = function() {
             const comentarios = g_data.comentarios || [];
 
-            // Reset general
             $("#containerGeneralGeneral_mTickets").removeClass("col-lg-12").addClass("col-lg-6");
             $("#modalGeneral_mTickets").removeClass("modal-lg").addClass("modal-xl");
             $(".camposFeedback_mTickets").val("").prop('disabled', false);
@@ -389,7 +402,6 @@
             }
         }
 
-
         public.editarTicket = function(type = 0) {
             if (type == 0) {
                 $('.campos_mTickets').prop('disabled', false);
@@ -419,18 +431,19 @@
         }
 
         public.guardar = function() {
-            cliente = $("#cliente_mTickets").val()
+            clientes = $("#clientes_mTickets").val()
 
             const datos = {
                 titulo: $("#titulo_mTickets").val(),
-                fecha_limite: $("#fechaLimite_mTickets").val() ? $("#fechaLimite_mTickets").val().replace("T", " ") + ":00" : null,
-                clientes_lightdata_ids: cliente !== "todas" ? cliente : [],
+                clientes_lightdata_ids: !clientes.includes("todos") ? clientes : [],
                 prioridad_ticket_id: $("#prioridad_mTickets").val() * 1,
-                tipo_ticket_id: $("#tipoTicket_mTickets").val() * 1,
+                fecha_limite: $("#fechaLimite_mTickets").val() ? $("#fechaLimite_mTickets").val().replace("T", " ") + ":00" : null,
                 usuario_asignado_id: $("#asignar_mTickets").val() * 1,
+                observadores_ids: $("#observadores_mTickets").val() || [],
+                proyecto_id: $("#proyecto_mTickets").val() || [],
+                tipo_ticket_id: $("#tipoTicket_mTickets").val() || [],
                 descripcion: $("#descripcion_mTickets").val(),
-                modo_asociacion: "",
-                observadores_ids: []
+                modo_asociacion: !clientes.includes("todos") ? 0 : 1
             };
 
             globalValidar.habilitarTiempoReal({
@@ -470,14 +483,19 @@
         };
 
         public.editar = function() {
-            const datosNuevos = {
-                "titulo": $("#titulo_mTickets").val(),
-                "fecha_limite": $("#fechaLimite_mTickets").val() ? $("#fechaLimite_mTickets").val().replace("T", " ") + ":00" : null,
-                "cliente_id": $("#cliente_mTickets").val() * 1,
-                "prioridad_ticket_id": $("#prioridad_mTickets").val() * 1,
-                "tipo_ticket_id": $("#tipoTicket_mTickets").val() * 1,
-                "usuario_asignado_id": $("#asignar_mTickets").val() * 1,
-                "descripcion": $("#descripcion_mTickets").val(),
+            clientes = $("#clientes_mTickets").val()
+
+            const datos = {
+                titulo: $("#titulo_mTickets").val(),
+                clientes_lightdata_ids: !clientes.includes("todos") ? clientes : [],
+                prioridad_ticket_id: $("#prioridad_mTickets").val() * 1,
+                fecha_limite: $("#fechaLimite_mTickets").val() ? $("#fechaLimite_mTickets").val().replace("T", " ") + ":00" : null,
+                usuario_asignado_id: $("#asignar_mTickets").val() * 1,
+                observadores_ids: $("#observadores_mTickets").val() || [],
+                proyecto_id: $("#proyecto_mTickets").val() || [],
+                tipo_ticket_id: $("#tipoTicket_mTickets").val() || [],
+                descripcion: $("#descripcion_mTickets").val(),
+                modo_asociacion: !clientes.includes("todos") ? 0 : 1
             };
 
             globalValidar.habilitarTiempoReal({
@@ -619,17 +637,6 @@
                 }
             });
         };
-
-        public.copiarTexto = function(e, texto) {
-            e.stopPropagation();
-            navigator.clipboard.writeText(texto)
-        }
-
-        public.copiarYRedirigir = function(e, password, url) {
-            e.stopPropagation();
-            navigator.clipboard.writeText(password)
-            window.open(url, "_blank");
-        }
 
         return public;
     })();

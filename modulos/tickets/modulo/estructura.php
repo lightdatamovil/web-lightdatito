@@ -105,7 +105,7 @@
                 htmlNroReporte = "S/D"
                 if (reporte.id) {
                     htmlNroReporte = reporte.id
-                    htmlNroReporte += `<button type="button" class="btn btn-icon rounded-pill btn-text-secondary ms-1" onclick="appModuloTickets.copiarTexto(event, '${reporte.id}')" data-bs-toggle="tooltip" data-bs-placement="top" title="Copiar"><i class="tf-icons ri-file-copy-line ri-15px"></i></button>`
+                    htmlNroReporte += `<button type="button" class="btn btn-icon rounded-pill btn-text-secondary ms-1" onclick="globalFuncionesJs.copiarTexto({event, copiar: '${reporte.id}'})" data-bs-toggle="tooltip" data-bs-placement="top" title="Copiar"><i class="tf-icons ri-file-copy-line ri-15px"></i></button>`
                 }
 
                 htmlTipoTicket = "S/D"
@@ -129,7 +129,7 @@
                 if (reporte.cliente_id) {
                     cliente = appSistema.clientes.find(item => item.id == reporte.cliente_id)
                     htmlCliente = cliente?.nombre || "S/D"
-                    htmlCliente += cliente.url_sistema ? `<button type="button" class="btn btn-icon rounded-pill btn-text-secondary ms-1" onclick="appModuloTickets.copiarYRedirigir(event, '${cliente.password_soporte}', '${cliente.url_sistema}')" data-bs-toggle="tooltip" data-bs-placement="top" title="Copiar contraseña e ir a link"><i class="tf-icons ri-external-link-line ri-15px"></i></button>` : "";
+                    htmlCliente += cliente.url_sistema ? `<button type="button" class="btn btn-icon rounded-pill btn-text-secondary ms-1" onclick="globalFuncionesJs.copiarYRedirigir({event, copiar: '${cliente.password_soporte}', redirigir: '${cliente.url_sistema}'})" data-bs-toggle="tooltip" data-bs-placement="top" title="Copiar contraseña e ir a link"><i class="tf-icons ri-external-link-line ri-15px"></i></button>` : "";
                 }
 
                 htmlUsuario = "S/D"
@@ -187,17 +187,6 @@
                 idContainer: "modulo_tickets"
             })
 
-        }
-
-        public.copiarTexto = function(e, texto) {
-            e.stopPropagation();
-            navigator.clipboard.writeText(texto)
-        }
-
-        public.copiarYRedirigir = function(e, password, url) {
-            e.stopPropagation();
-            navigator.clipboard.writeText(password)
-            window.open(url, "_blank");
         }
 
         function horasRestantes(fechaISO) {
