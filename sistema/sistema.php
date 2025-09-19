@@ -7,11 +7,15 @@
         userId: localStorage.getItem("userId") * 1,
         userPuesto: JSON.parse(localStorage.getItem("userPuesto")),
         authToken: localStorage.getItem("authToken"),
+
         clientes: [],
-        usuarios: [],
-        prioridades: [],
         estadosTickets: [],
+        paises: [],
+        planes: [],
+        prioridades: [],
+        proyectos: [],
         tipoTicket: [],
+        usuarios: [],
 
         inicializar: async function() {
             if (sistemaIniciado) return;
@@ -33,10 +37,13 @@
             await globalRequest.get(`/preload`, {
                 onSuccess: (result) => {
                     this.clientes = result.data.clientesLightdata
-                    this.usuarios = result.data.usuarios
-                    this.prioridades = result.data.prioridades
                     this.estadosTickets = result.data.estados_ticket
+                    this.paises = result.data.paises
+                    this.planes = result.data.planes
+                    this.prioridades = result.data.prioridades
+                    this.proyectos = result.data.proyectos
                     this.tipoTicket = result.data.tipo_ticket
+                    this.usuarios = result.data.usuarios
                 },
             });
         },

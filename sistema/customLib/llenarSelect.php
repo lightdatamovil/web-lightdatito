@@ -45,6 +45,71 @@
             $(`#${id}`).html(buffer)
         }
 
+
+        public.paises = function({
+            id,
+            multiple = false
+        }) {
+            if (appSistema.paises.length == 0) {
+                $(`#${id}`).html(`<option value="" ${multiple ? "" : "selected"} disabled>Sin paises</option>`)
+                return
+            }
+
+            buffer = ""
+            if (!multiple) {
+                buffer = `<option value="" selected>Seleccionar pais</option>`
+            }
+
+            for (pais of appSistema.paises) {
+                buffer += `<option value="${pais["id"]}">${pais["nombre"] || "Sin nombre"}</option>`
+            }
+
+            $(`#${id}`).html(buffer)
+        }
+
+        public.planes = function({
+            id,
+            multiple = false
+        }) {
+            if (appSistema.planes.length == 0) {
+                $(`#${id}`).html(`<option value="" ${multiple ? "" : "selected"} disabled>Sin planes</option>`)
+                return
+            }
+
+            buffer = ""
+            if (!multiple) {
+                buffer = `<option value="" selected>Seleccionar plan</option>`
+            }
+
+            for (plan of appSistema.planes) {
+                buffer += `<option value="${plan["id"]}">${plan["nombre"] || "Sin nombre"}</option>`
+            }
+
+            $(`#${id}`).html(buffer)
+        }
+
+        public.proyectos = function({
+            id,
+            multiple = false
+        }) {
+            if (appSistema.proyectos.length == 0) {
+                $(`#${id}`).html(`<option value="" ${multiple ? "" : "selected"} disabled>Sin proyectos</option>`)
+                return
+            }
+
+            buffer = ""
+            if (!multiple) {
+                buffer = `<option value="" selected>Seleccionar proyecto</option>`
+            }
+
+            for (proyecto of appSistema.proyectos) {
+                buffer += `<option value="${proyecto["id"]}">${proyecto["nombre"] || "Sin nombre"}</option>`
+            }
+
+            $(`#${id}`).html(buffer)
+        }
+
+
         public.clientes = function({
             id,
             multiple = false

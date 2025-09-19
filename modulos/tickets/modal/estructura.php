@@ -2,6 +2,7 @@
     const appModalTickets = (function() {
         let g_did = 0;
         let g_data;
+        let g_historial;
         let donde = 0;
         let opcionAnterior = 0;
         let clientesSeleccionados = []
@@ -33,6 +34,12 @@
                 id: "observadores_mTickets",
                 multiple: true
             })
+
+            await globalLlenarSelect.proyectos({
+                id: "proyecto_mTickets",
+                multiple: true
+            })
+
             await globalLlenarSelect.tiposTickets({
                 id: "tipoTicket_mTickets",
                 multiple: true
@@ -43,7 +50,7 @@
                 $("#tituloModal_mTickets").text("Nuevo ticket");
                 $("#subtitulo_mTickets").text("Creacion de ticket nuevo, completar formulario");
                 $('.campos_mTickets').prop('disabled', false);
-                $(".containersVerTicket_mTickets").addClass("ocultar");
+                $("#containerBtn_mTickets").addClass("ocultar");
                 $("#asignadoPor_mTickets, #estado_mTickets").text("").addClass("ocultar")
                 $("#containerBtnGuardar_mTickets").removeClass("ocultar");
                 $("#modal_mTickets").modal("show")
@@ -52,16 +59,9 @@
                 await globalLoading.open()
                 $("#tituloModal_mTickets").text(`Ticket N° ${did}`);
                 $('.campos_mTickets').prop('disabled', true);
-                $(".containersVerTicket_mTickets").removeClass("ocultar");
+                $("#containerBtn_mTickets").removeClass("ocultar");
                 $("#asignadoPor_mTickets, #estado_mTickets").text("").removeClass("ocultar")
                 $("#containerBtnGuardar_mTickets").addClass("ocultar");
-                if (appSistema.userPuesto.includes(1)) {
-                    $(".containersDesarrollo_mTickets").removeClass("ocultar");
-                    $(".containersSoporte_mTickets").addClass("ocultar");
-                } else {
-                    $(".containersSoporte_mTickets").removeClass("ocultar");
-                    $(".containersDesarrollo_mTickets").addClass("ocultar");
-                }
                 await get()
             }
 
@@ -74,44 +74,22 @@
             })
         }
 
-        public.manejarSelectTodos = function(select) {
-            let valores = Array.from(select.value ? $(select).val() : []);
 
-            if (!clientesSeleccionados.includes("todos") && valores.includes("todos")) {
-                clientesSeleccionados = valores
-                $(select).val(["todos"]).trigger("change.select2");
-            } else if (clientesSeleccionados.includes("todos") && valores.length > 1) {
-                clientesSeleccionados = valores
-                $(select).val(clientesSeleccionados.filter(v => v !== "todos")).trigger("change.select2");
-            } else {
-                clientesSeleccionados = valores
-            }
-
-        }
 
         public.cerrarModal = function() {
-            let huboCambios = false;
             const modalId = $("#modal_mTickets");
             const modal = bootstrap.Modal.getInstance(modalId[0]) || new bootstrap.Modal(modalId[0]);
 
             if (donde == 0) {
-                modalId.find(".campos_mTickets").each(function() {
-                    valor = $(this).val()
-
-                    if (valor) {
-                        huboCambios = true;
-                        return false;
-                    }
+                let huboCambios = modalId.find(".campos_mTickets").toArray().some(el => {
+                    const valor = $(el).val();
+                    return Array.isArray(valor) ? valor.length > 0 : (valor !== null && valor !== "");
                 });
 
                 if (huboCambios) {
                     globalSweetalert.confirmar({
                         titulo: `¿Estás seguro de volver? Perderás los cambios`
-                    }).then(function(confirmado) {
-                        if (confirmado) {
-                            modal.hide();
-                        }
-                    });
+                    }).then(confirmado => confirmado && modal.hide());
                 } else {
                     modal.hide();
                 }
@@ -123,9 +101,9 @@
         function get() {
             globalRequest.get(`/${rutaAPI}/${g_did}`, {
                 onSuccess: function(result) {
-                    g_data = result.data;
+                    g_data = result.data.ticket;
+                    g_historial = result.data.historial;
                     llenarCampos()
-                    globalLoading.close()
                     $("#modal_mTickets").modal("show")
                 }
             });
@@ -173,7 +151,6 @@
             globalActivarAcciones.tooltips({
                 idContainer: "modal_mTickets"
             })
-
         }
 
         function resetModal() {
@@ -187,19 +164,15 @@
             $("select.select2_mTickets[multiple]").val(null).trigger("change");
             $("#btnCopiarTitulo_mTickets, #btnAbrirSistema_mTickets").empty()
             $("#asignadoPor_mTickets, #estado_mTickets").text("").addClass("ocultar")
-            $(".containersBtnModificar_mTickets, #containerGeneralFeedback_mTickets, #containerBtnsFooter_mTickets, #containerFechaLimite_mTickets").addClass("ocultar")
+            $(".containersBtnModificar_mTickets, #containerGeneralHistorial_mTickets, #containerBtn_mTickets, #containerFechaLimite_mTickets").addClass("ocultar")
             $("#containerPrioridad_mTickets").removeClass("col-md-6 col-lg-6").addClass("col-md-12 col-lg-12")
             $("#containerGeneralGeneral_mTickets").removeClass("col-lg-6").addClass("col-lg-12")
             $("#modalGeneral_mTickets").removeClass("modal-xl").addClass("modal-lg")
             $("#modalContent_mTickets").css("border", "0")
 
-
             globalValidar.limpiarTodas()
             globalValidar.deshabilitarTiempoReal({
                 className: "camposObli_mTickets"
-            })
-            globalValidar.deshabilitarTiempoReal({
-                className: "camposObliFeedback_mTickets"
             })
         };
 
@@ -224,7 +197,6 @@
                 }
             }
 
-
             if (opcionSeleccionada == "" || opcionSeleccionada == 1) {
                 $("#containerPrioridad_mTickets").removeClass("col-md-6 col-lg-6").addClass("col-md-12 col-lg-12")
                 $("#containerFechaLimite_mTickets").addClass("ocultar")
@@ -233,8 +205,21 @@
                 $("#containerPrioridad_mTickets").removeClass("col-md-12 col-lg-12").addClass("col-md-6 col-lg-6")
                 $("#containerFechaLimite_mTickets").removeClass("ocultar")
             }
-
             opcionAnterior = opcionSeleccionada
+        }
+
+        public.onChangeClientes = function(select) {
+            let valores = Array.from(select.value ? $(select).val() : []);
+
+            if (!clientesSeleccionados.includes("todos") && valores.includes("todos")) {
+                clientesSeleccionados = valores
+                $(select).val(["todos"]).trigger("change.select2");
+            } else if (clientesSeleccionados.includes("todos") && valores.length > 1) {
+                clientesSeleccionados = valores
+                $(select).val(clientesSeleccionados.filter(v => v !== "todos")).trigger("change.select2");
+            } else {
+                clientesSeleccionados = valores
+            }
         }
 
         function cambiarFechaLimite(horasSumadas) {
@@ -253,159 +238,53 @@
             $(`#fechaLimite_mTickets`).val(fechaFormateada);
         }
 
-        public.renderCambioEstado = function(type) {
-
-            $(".camposFeedback_mTickets").removeClass("camposObliFeedback_mTickets")
-
-            buffer = ""
-            buffer = `<div class="row justify-content-end g-3">`
-
-            buffer += `<div class="col-12 col-md-12 col-lg-3">`
-            buffer += `<button type="button" class="btn btn-outline-danger w-100" onclick="appModalTickets.cancelarCambioEstado()">Cancelar</button>`
-            buffer += `</div>`
-
-            switch (type) {
-                case 1:
-                    buffer += `<div class="col-12 col-md-12 col-lg-4">`
-                    buffer += `<button type="button" class="btn btn-label-warning waves-effect w-100" onclick="appModalTickets.cambiarEstado(2)">`
-                    buffer += `<span class="tf-icons ri-delete-back-2-line ri-16px me-2"></span>Desestimar`
-                    buffer += `</button>`
-                    buffer += `</div>`
-                    $("#containerDevolucion_mTickets").removeClass("ocultar")
-                    $("#containerFeedback_mTickets, #containerQueHice_mTickets").addClass("ocultar")
-                    $("#devolucion_mTickets").addClass("camposObliFeedback_mTickets")
-                    break;
-                case 2:
-                    buffer += `<div class="col-12 col-md-12 col-lg-4">`
-                    buffer += `<button type="button" class="btn btn-label-success waves-effect w-100" onclick="appModalTickets.cambiarEstado(3)">`
-                    buffer += `<span class="tf-icons ri-check-line ri-16px me-2"></span>Ticket resuelto`
-                    buffer += `</button>`
-                    buffer += `</div>`
-                    $("#containerDevolucion_mTickets, #containerQueHice_mTickets").removeClass("ocultar")
-                    $("#containerFeedback_mTickets").addClass("ocultar")
-                    $("#devolucion_mTickets, #queHice_mTickets").addClass("camposObliFeedback_mTickets")
-                    break;
-                case 3:
-                    buffer += `<div class="col-12 col-md-12 col-lg-4">`
-                    buffer += `<button type="button" class="btn btn-label-info waves-effect w-100" onclick="appModalTickets.cambiarEstado(4)">`
-                    buffer += `<span class="tf-icons ri-check-double-line ri-16px me-2"></span>Cerrar ticket`
-                    buffer += `</button>`
-                    buffer += `</div>`
-                    $("#containerFeedback_mTickets").removeClass("ocultar")
-                    $("#feedback_mTickets").addClass("camposObliFeedback_mTickets")
-                    break;
-            }
-
-            buffer += `</div>`
-
-            $(".containersVerTicket_mTickets").addClass("ocultar")
-            $("#containerBtnsFooter_mTickets").html(buffer).removeClass("ocultar")
-            $("#containerGeneralGeneral_mTickets").removeClass("col-lg-12").addClass("col-lg-6")
-            $("#modalGeneral_mTickets").removeClass("modal-lg").addClass("modal-xl")
-            if (g_data.estado_ticket_id == 1) {
-                $("#containerGeneralFeedback_mTickets").removeClass("ocultar")
-            }
-        }
-
         public.renderAcciones = function() {
             $("#containerGeneralGeneral_mTickets").removeClass("col-lg-12").addClass("col-lg-6");
             $("#modalGeneral_mTickets").removeClass("modal-lg").addClass("modal-xl");
+            $(".btnAccionTickets_mTickets").addClass("ocultar")
+            $("#containerGeneralHistorial_mTickets").removeClass("ocultar")
             $("#nuevoComentario_mTickets").val("")
-            $("#containerGeneralFeedback_mTickets").removeClass("ocultar")
-        }
-
-        public.renderFeedback = function() {
-            const comentarios = g_data.comentarios || [];
-
-            $("#containerGeneralGeneral_mTickets").removeClass("col-lg-12").addClass("col-lg-6");
-            $("#modalGeneral_mTickets").removeClass("modal-lg").addClass("modal-xl");
-            $(".camposFeedback_mTickets").val("").prop('disabled', false);
 
             // ===================
             // BLOQUE SOPORTE
             // ===================
             if (vistaPorPuesto.ver("soporte")) {
-                $(".containersSoporte_mTickets").removeClass("ocultar");
-                $("#containerQueHice_mTickets").addClass("ocultar");
-
-                const devolucion = comentarios.find(c => c.tipo_comentario == 2)?.contenido || "";
-
                 switch (g_data.estado_ticket_id) {
                     case 1:
-                        $("#containerBtnsFooter_mTickets, #containerGeneralFeedback_mTickets, #btnCerrarTicket_mTickets").addClass("ocultar");
-                        $("#btnEliminarTicket_mTickets, #btnEditarTicket_mTickets").removeClass("ocultar");
-                        $("#containerGeneralGeneral_mTickets").removeClass("col-lg-6").addClass("col-lg-12");
-                        $("#modalGeneral_mTickets").removeClass("modal-xl").addClass("modal-lg");
+                        $(".btnAlterarTickets_mTickets").removeClass("ocultar");
                         break;
                     case 2:
                     case 3:
+                        $(".btnSoporteTickets_mTickets").removeClass("ocultar")
+                        break;
                     case 4:
-                        $("#containerBtnsFooter_mTickets, #btnEliminarTicket_mTickets, #btnEditarTicket_mTickets, .containersInputFeedback_mTickets").addClass("ocultar");
-                        $("#containerGeneralFeedback_mTickets, #containerDevolucion_mTickets, #btnCerrarTicket_mTickets").removeClass("ocultar");
-                        $("#devolucion_mTickets").val(devolucion).prop('disabled', true);
-
-                        if (g_data.estado_ticket_id == 4) {
-                            $("#btnCerrarTicket_mTickets").addClass("ocultar")
-                            $("#containerFeedback_mTickets").removeClass("ocultar")
-                            const feedback = comentarios.find(c => c.tipo_comentario == 4)?.contenido || "";
-                            $("#feedback_mTickets").val(feedback).prop('disabled', true);
-                        }
                         break;
                 }
-
-            } else {
-                $(".containersSoporte_mTickets").addClass("ocultar");
             }
 
             // ===================
             // BLOQUE DESARROLLO
             // ===================
             if (vistaPorPuesto.ver("desarrollo")) {
-                $(".containersDesarrollo_mTickets").removeClass("ocultar");
-
-                const devolucion = comentarios.find(c => c.tipo_comentario == 2)?.contenido || "";
-                const queHice = comentarios.find(c => c.tipo_comentario == 3)?.contenido || "";
-
                 switch (g_data.estado_ticket_id) {
                     case 1:
-                        $("#containerBtnsFooter_mTickets, #containerGeneralFeedback_mTickets").addClass("ocultar");
-                        $("#containerGeneralGeneral_mTickets").removeClass("col-lg-6").addClass("col-lg-12");
-                        $("#modalGeneral_mTickets").removeClass("modal-xl").addClass("modal-lg");
+                        $(".btnDesarrolloTickets_mTickets").removeClass("ocultar")
                         break;
                     case 2:
-                        $("#containerBtnsFooter_mTickets, .containersInputFeedback_mTickets, .containersVerTicket_mTickets").addClass("ocultar");
-                        $("#containerGeneralFeedback_mTickets, #containerDevolucion_mTickets").removeClass("ocultar");
-                        $("#devolucion_mTickets").val(devolucion).prop('disabled', true);
                         break;
                     case 3:
-                        $("#containerBtnsFooter_mTickets, .containersInputFeedback_mTickets, .containersVerTicket_mTickets").addClass("ocultar");
-                        $("#containerGeneralFeedback_mTickets, #containerDevolucion_mTickets, #containerQueHice_mTickets").removeClass("ocultar");
-                        $("#devolucion_mTickets").val(devolucion).prop('disabled', true);
-                        $("#queHice_mTickets").val(queHice).prop('disabled', true);
                         break;
                     case 4:
-                        $("#containerBtnsFooter_mTickets, .containersInputFeedback_mTickets, .containersVerTicket_mTickets").addClass("ocultar");
-                        $("#containerGeneralFeedback_mTickets, #containerDevolucion_mTickets").removeClass("ocultar");
-                        $("#devolucion_mTickets").val(devolucion).prop('disabled', true);
-
-                        if (queHice) {
-                            $("#containerQueHice_mTickets").removeClass("ocultar");
-                            $("#queHice_mTickets").val(queHice).prop('disabled', true);
-                        } else {
-                            $("#containerQueHice_mTickets").addClass("ocultar");
-                        }
                         break;
                 }
 
-            } else {
-                $(".containersDesarrollo_mTickets").addClass("ocultar");
             }
         }
 
         public.editarTicket = function(type = 0) {
             if (type == 0) {
                 $('.campos_mTickets').prop('disabled', false);
-                $(".containersVerTicket_mTickets, #btnAbrirSistema_mTickets").addClass("ocultar")
+                $("#containerBtn_mTickets, #btnAbrirSistema_mTickets").addClass("ocultar")
                 $(".containersBtnModificar_mTickets").removeClass("ocultar")
                 $("#btnCopiarTitulo_mTickets, #btnAbrirSistema_mTickets").empty()
 
@@ -420,7 +299,7 @@
                 }
                 $('.campos_mTickets').prop('disabled', true);
                 $(".containersBtnModificar_mTickets").addClass("ocultar")
-                $(".containersSoporte_mTickets").removeClass("ocultar")
+                $("#containerBtn_mTickets").removeClass("ocultar")
             }
         }
 
@@ -440,8 +319,8 @@
                 fecha_limite: $("#fechaLimite_mTickets").val() ? $("#fechaLimite_mTickets").val().replace("T", " ") + ":00" : null,
                 usuario_asignado_id: $("#asignar_mTickets").val() * 1,
                 observadores_ids: $("#observadores_mTickets").val() || [],
-                proyecto_id: $("#proyecto_mTickets").val() || [],
-                tipo_ticket_id: $("#tipoTicket_mTickets").val() || [],
+                proyectos_ids: $("#proyecto_mTickets").val() || [],
+                tipo_tickets_ids: $("#tipoTicket_mTickets").val() || [],
                 descripcion: $("#descripcion_mTickets").val(),
                 modo_asociacion: !clientes.includes("todos") ? 0 : 1
             };
@@ -492,8 +371,8 @@
                 fecha_limite: $("#fechaLimite_mTickets").val() ? $("#fechaLimite_mTickets").val().replace("T", " ") + ":00" : null,
                 usuario_asignado_id: $("#asignar_mTickets").val() * 1,
                 observadores_ids: $("#observadores_mTickets").val() || [],
-                proyecto_id: $("#proyecto_mTickets").val() || [],
-                tipo_ticket_id: $("#tipoTicket_mTickets").val() || [],
+                proyectos_ids: $("#proyecto_mTickets").val() || [],
+                tipo_tickets_ids: $("#tipoTicket_mTickets").val() || [],
                 descripcion: $("#descripcion_mTickets").val(),
                 modo_asociacion: !clientes.includes("todos") ? 0 : 1
             };
@@ -539,85 +418,6 @@
                     }
                 });
         };
-
-        function validacionFeedback() {
-            return globalValidar.obligatorios({
-                className: "camposObliFeedback_mTickets"
-            })
-        }
-
-        public.cambiarEstado = function(estado) {
-            const datos = {
-                "estado_ticket_id": estado,
-                "comentarios": []
-            };
-
-            $(".camposObliFeedback_mTickets").each(function() {
-                datos.comentarios.push({
-                    "usuario_id": appSistema.userId,
-                    "tipo_comentario": $(this).data("tipocomentario") * 1,
-                    "contenido": $(this).val()
-                });
-            });
-
-            globalValidar.habilitarTiempoReal({
-                className: "camposObliFeedback_mTickets",
-                callback: validacionFeedback
-            })
-
-            if (validacionFeedback()) {
-                globalSweetalert.alert({
-                    titulo: "Verifique los campos"
-                })
-                return
-            }
-
-            mensaje = estado == 2 ? "desestimado" : estado == 3 ? "resuelto" : "cerrado"
-
-            globalSweetalert.confirmar({
-                    titulo: `¿Estas seguro de marcar este ticket como ${mensaje}?`
-                })
-                .then(function(confirmado) {
-                    if (confirmado) {
-                        globalRequest.put(`/${rutaAPI}/${g_did}/estado`, datos, {
-                            onSuccess: function(result) {
-                                $("#modal_mTickets").modal("hide")
-                                globalSweetalert.exito({
-                                    titulo: `Ticket ${mensaje} con exito!`
-                                })
-                                appModuloTickets.getListado();
-                            }
-                        });
-                    }
-                });
-        };
-
-        public.cancelarCambioEstado = function() {
-            globalValidar.limpiarTodas();
-            globalValidar.deshabilitarTiempoReal({
-                className: "camposObliFeedback_mTickets"
-            });
-            $(".camposObliFeedback_mTickets").val("");
-            $(".containersInputFeedback_mTickets:has(.camposObliFeedback_mTickets), #containerBtnsFooter_mTickets").addClass("ocultar");
-
-            if (vistaPorPuesto.ver("desarrollo")) {
-                $(".containersDesarrollo_mTickets").removeClass("ocultar");
-            } else {
-                $(".containersDesarrollo_mTickets").addClass("ocultar");
-            }
-
-            if (vistaPorPuesto.ver("soporte")) {
-                $(".containersSoporte_mTickets").removeClass("ocultar");
-            } else {
-                $(".containersSoporte_mTickets").addClass("ocultar");
-            }
-
-            if (g_data.estado_ticket_id == 1) {
-                $("#containerGeneralFeedback_mTickets").addClass("ocultar");
-                $("#containerGeneralGeneral_mTickets").removeClass("col-lg-6").addClass("col-lg-12");
-                $("#modalGeneral_mTickets").removeClass("modal-xl").addClass("modal-lg");
-            }
-        }
 
         public.eliminar = function(did) {
             globalSweetalert.confirmar({

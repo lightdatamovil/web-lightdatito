@@ -43,10 +43,10 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-12 col-md-12 col-lg-12 position-relative" id="containerclientes_mTickets">
+                                        <div class="col-12 col-md-12 col-lg-12 position-relative">
                                             <div id="btnAbrirSistema_mTickets" class="position-absolute" style="top: 5px; right: 2rem; z-index: 10;"></div>
                                             <div class="form-floating form-floating-outline">
-                                                <select id="clientes_mTickets" class="form-select select2_mTickets campos_mTickets camposObli_mTickets" multiple onchange="appModalTickets.manejarSelectTodos(this)"></select>
+                                                <select id="clientes_mTickets" class="form-select select2_mTickets campos_mTickets camposObli_mTickets" multiple onchange="appModalTickets.onChangeClientes(this)"></select>
                                                 <label for="clientes_mTickets">Clientes</label>
                                                 <div class="invalid-feedback">Debe seleccionar al menos uno</div>
                                             </div>
@@ -69,7 +69,7 @@
 
                                         <div class="col-12 col-md-6 col-lg-6">
                                             <div class="form-floating form-floating-outline">
-                                                <select id="asignar_mTickets" class="form-select select2_mTickets campos_mTickets"></select>
+                                                <select id="asignar_mTickets" class="form-select campos_mTickets"></select>
                                                 <label for="asignar_mTickets">Asignado a</label>
                                             </div>
                                         </div>
@@ -111,7 +111,7 @@
                             </div>
 
                         </div>
-                        <div class="col-12 col-md-12 col-lg-6 ocultar" id="containerGeneralFeedback_mTickets">
+                        <div class="col-12 col-md-12 col-lg-6 ocultar" id="containerGeneralHistorial_mTickets">
                             <div class="nav-align-top col-12 mb-6">
                                 <ul id="tabs_mTickets" class="nav nav-tabs nav-fill" role="tablist">
                                     <li class="nav-item">
@@ -123,8 +123,8 @@
                                             data-bs-target="#tabGeneral_mTickets"
                                             aria-controls="tabGeneral_mTickets"
                                             aria-selected="true">
-                                            <span class="d-none d-sm-block"><i class="tf-icons ri-feedback-line me-2"></i>Acciones</span>
-                                            <i class="ri-feedback-line ri-20px d-sm-none"></i>
+                                            <span class="d-none d-sm-block"><i class="tf-icons ri-history-line me-2"></i>Historial</span>
+                                            <i class="ri-history-line ri-20px d-sm-none"></i>
                                         </button>
                                     </li>
                                 </ul>
@@ -136,12 +136,137 @@
 
                                         <div class="col-12 col-md-12 col-lg-12">
                                             <div class="form-floating form-floating-outline">
-                                                <textarea class="form-control" style="height: 120px;" id="nuevoComentario_mTickets" placeholder="Agregar un cometario..."></textarea>
+                                                <textarea class="form-control" style="height: 70px;" id="nuevoComentario_mTickets" placeholder="Agregar un cometario..."></textarea>
                                                 <label for="nuevoComentario_mTickets">Nuevo comentario</label>
                                             </div>
                                         </div>
 
                                     </form>
+                                    <div class="w-100 p-3 mt-3" style="height: 355px;overflow-y: auto;">
+                                        <ul class="timeline mb-0 pb-5">
+                                            <li class="timeline-item timeline-item-transparent">
+                                                <span class="timeline-point timeline-point-primary"></span>
+                                                <div class="timeline-event">
+                                                    <div class="timeline-header mb-3">
+                                                        <h6 class="mb-0">Joaquin T. - COMENTARIO</h6>
+                                                        <small class="text-muted">23/02/2025 13:08 hs</small>
+                                                    </div>
+                                                    <div class="bg-body p-3 rounded">
+                                                        <p class="m-0">orem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim </p>
+
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="timeline-item timeline-item-transparent">
+                                                <span class="timeline-point timeline-point-primary"></span>
+                                                <div class="timeline-event">
+                                                    <div class="timeline-header mb-3">
+                                                        <h6 class="mb-0">Joaquin T. - CAMBIO ESTADO</h6>
+                                                        <small class="text-muted">23/02/2025 13:08 hs</small>
+                                                    </div>
+                                                    <div class="mb-2">
+                                                        <span class="badge rounded-pill me-2" style="color: white; background-color: #FFC107;">pendiente</span>>
+                                                        <span class="badge rounded-pill" style="color: white; background-color: #72e128;">resuelto</span>
+                                                    </div>
+                                                    <div class="bg-body p-3 mb-2 rounded">
+                                                        <p class="mb-1 fw-bold">Devolucion a soporte</p>
+                                                        <p class="m-0">orem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim </p>
+                                                    </div>
+                                                    <div class="bg-body p-3 rounded">
+                                                        <p class="mb-1 fw-bold">Que hice</p>
+                                                        <p class="m-0">orem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim </p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="timeline-item timeline-item-transparent">
+                                                <span class="timeline-point timeline-point-primary"></span>
+                                                <div class="timeline-event">
+                                                    <div class="timeline-header mb-3">
+                                                        <h6 class="mb-0">12 Invoices have been paid</h6>
+                                                        <small class="text-muted">12 min ago</small>
+                                                    </div>
+                                                    <p class="mb-2">Invoices have been paid to the company</p>
+                                                    <div class="d-flex align-items-center mb-1">
+                                                        <div class="badge bg-lighter rounded-3 mb-1_5">
+                                                            <img src="../../assets//img/icons/misc/pdf.png" alt="img" width="15" class="me-2" />
+                                                            <span class="h6 mb-0 text-body">invoices.pdf</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="timeline-item timeline-item-transparent">
+                                                <span class="timeline-point timeline-point-success"></span>
+                                                <div class="timeline-event">
+                                                    <div class="timeline-header mb-3">
+                                                        <h6 class="mb-0">Client Meeting</h6>
+                                                        <small class="text-muted">45 min ago</small>
+                                                    </div>
+                                                    <p class="mb-2">Project meeting with john @10:15am</p>
+                                                    <div class="d-flex justify-content-between flex-wrap gap-2 mb-1_5">
+                                                        <div class="d-flex flex-wrap align-items-center">
+                                                            <div class="avatar avatar-sm me-2">
+                                                                <img src="../../assets/img/avatars/1.png" alt="Avatar" class="rounded-circle" />
+                                                            </div>
+                                                            <div>
+                                                                <p class="mb-0 small fw-medium">Lester McCarthy (Client)</p>
+                                                                <small>CEO of Pixinvent</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="timeline-item timeline-item-transparent">
+                                                <span class="timeline-point timeline-point-info"></span>
+                                                <div class="timeline-event">
+                                                    <div class="timeline-header mb-3">
+                                                        <h6 class="mb-0">Create a new project for client</h6>
+                                                        <small class="text-muted">2 Day Ago</small>
+                                                    </div>
+                                                    <p class="mb-2">6 team members in a project</p>
+                                                    <ul class="list-group list-group-flush">
+                                                        <li
+                                                            class="list-group-item d-flex justify-content-between align-items-center flex-wrap border-top-0 p-0">
+                                                            <div class="d-flex flex-wrap align-items-center">
+                                                                <ul class="list-unstyled users-list d-flex align-items-center avatar-group m-0 me-2">
+                                                                    <li
+                                                                        data-bs-toggle="tooltip"
+                                                                        data-popup="tooltip-custom"
+                                                                        data-bs-placement="top"
+                                                                        title="Vinnie Mostowy"
+                                                                        class="avatar pull-up">
+                                                                        <img class="rounded-circle" src="../../assets/img/avatars/1.png" alt="Avatar" />
+                                                                    </li>
+                                                                    <li
+                                                                        data-bs-toggle="tooltip"
+                                                                        data-popup="tooltip-custom"
+                                                                        data-bs-placement="top"
+                                                                        title="Allen Rieske"
+                                                                        class="avatar pull-up">
+                                                                        <img class="rounded-circle" src="../../assets/img/avatars/1.png" alt="Avatar" />
+                                                                    </li>
+                                                                    <li
+                                                                        data-bs-toggle="tooltip"
+                                                                        data-popup="tooltip-custom"
+                                                                        data-bs-placement="top"
+                                                                        title="Julee Rossignol"
+                                                                        class="avatar pull-up">
+                                                                        <img class="rounded-circle" src="../../assets/img/avatars/1.png" alt="Avatar" />
+                                                                    </li>
+                                                                    <li class="avatar">
+                                                                        <span
+                                                                            class="avatar-initial rounded-circle pull-up text-heading"
+                                                                            data-bs-toggle="tooltip"
+                                                                            data-bs-placement="bottom"
+                                                                            title="3 more">+3</span>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -156,23 +281,23 @@
                         <div class="col-12 col-md-12 col-lg-10">
                             <div class="row justify-content-end g-3">
 
-                                <div class="containersDesarrollo_mTickets containersVerTicket_mTickets d-flex justify-content-end">
-                                    <button type="button" class="btn btn-icon rounded-pill btn-label-warning me-3" onclick="appModalTickets.renderCambioEstado(1)" data-bs-toggle="tooltip" data-bs-placement="top" title="Desestimar">
-                                        <i class="tf-icons ri-delete-back-2-line ri-22px"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-icon rounded-pill btn-label-success" onclick="appModalTickets.renderCambioEstado(2)" data-bs-toggle="tooltip" data-bs-placement="top" title="Resolver">
-                                        <i class="tf-icons ri-check-line ri-22px"></i>
-                                    </button>
-                                </div>
-
-                                <div class="containersSoporte_mTickets containersVerTicket_mTickets d-flex justify-content-end">
-                                    <button id="btnEditarTicket_mTickets" type="button" class="btn btn-icon rounded-pill btn-label-success me-3" onclick="appModalTickets.editarTicket()" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar ticket">
+                                <div class="d-flex justify-content-end gap-3" id="containerBtn_mTickets">
+                                    <button id="btnEditarTicket_mTickets" type="button" class="btn btn-icon rounded-pill btn-label-success btnAlterarTickets_mTickets btnAccionTickets_mTickets" onclick="appModalTickets.editarTicket()" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar ticket">
                                         <i class="tf-icons ri-edit-line ri-22px"></i>
                                     </button>
-                                    <button id="btnEliminarTicket_mTickets" type="button" class="btn btn-icon rounded-pill btn-label-danger" onclick="appModalTickets.eliminar()" data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar">
+                                    <button id="btnEliminarTicket_mTickets" type="button" class="btn btn-icon rounded-pill btn-label-danger btnAlterarTickets_mTickets btnAccionTickets_mTickets" onclick="appModalTickets.eliminar()" data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar">
                                         <i class="tf-icons ri-delete-bin-6-line ri-22px"></i>
                                     </button>
-                                    <button id="btnCerrarTicket_mTickets" type="button" class="btn btn-icon rounded-pill btn-label-info ms-3" onclick="appOffCanvasTicket.open()" data-bs-toggle="tooltip" data-bs-placement="top" title="Cerrar">
+                                    <button type="button" class="btn btn-icon rounded-pill btn-label-warning btnDesarrolloTickets_mTickets btnAccionTickets_mTickets" onclick="appOffCanvasTicket.open({mode: 2})" data-bs-toggle="tooltip" data-bs-placement="top" title="Desestimar">
+                                        <i class="tf-icons ri-delete-back-2-line ri-22px"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-icon rounded-pill btn-label-success btnDesarrolloTickets_mTickets btnAccionTickets_mTickets" onclick="appOffCanvasTicket.open({mode: 1})" data-bs-toggle="tooltip" data-bs-placement="top" title="Resolver">
+                                        <i class="tf-icons ri-check-line ri-22px"></i>
+                                    </button>
+                                    <button id="btnDevolverTicket_mTickets" type="button" class="btn btn-icon rounded-pill btn-label-dark btnSoporteTickets_mTickets btnAccionTickets_mTickets" onclick="appOffCanvasTicket.open({mode: 4})" data-bs-toggle="tooltip" data-bs-placement="top" title="Devolver a desarrollo">
+                                        <i class="tf-icons ri-arrow-go-back-line ri-18px"></i>
+                                    </button>
+                                    <button id="btnCerrarTicket_mTickets" type="button" class="btn btn-icon rounded-pill btn-label-info btnSoporteTickets_mTickets btnAccionTickets_mTickets" onclick="appOffCanvasTicket.open({mode: 3})" data-bs-toggle="tooltip" data-bs-placement="top" title="Cerrar">
                                         <i class="tf-icons ri-check-double-line ri-22px"></i>
                                     </button>
                                 </div>
@@ -188,9 +313,6 @@
                                 <div class="col-12 col-md-12 col-lg-4 ocultar containersBtnModificar_mTickets">
                                     <button type="button" class="btn btn-success w-100" onclick="appModalTickets.editar()">Modificar</button>
                                 </div>
-
-                                <div class="col-12 col-md-12 col-lg-12" id="containerBtnsFooter_mTickets"></div>
-
                             </div>
                         </div>
 
